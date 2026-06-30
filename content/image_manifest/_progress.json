@@ -1,0 +1,15 @@
+{
+ "mode": "2tab-freshchat",
+ "tabs": {
+  "1554242001": {
+   "state": "awaiting",
+   "pending": "asm_posture_scoliosis_adams",
+   "pendingFile": "assessment/asm_posture_scoliosis_adams.png"
+  },
+  "1554242007": {
+   "state": "awaiting",
+   "pending": "asm_neuro_reflexes",
+   "pendingFile": "assessment/asm_neuro_reflexes.png"
+  }
+ }
+}

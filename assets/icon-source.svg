@@ -1,0 +1,45 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#19c5b0"/>
+      <stop offset="0.55" stop-color="#0f8fb0"/>
+      <stop offset="1" stop-color="#0b2c54"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.36" r="0.6">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fig" x1="512" y1="250" x2="512" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eaf6ff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <rect width="1024" height="1024" fill="url(#glow)"/>
+
+  <!-- upward level-up chevrons (progress) -->
+  <g fill="none" stroke="#ff8a3d" stroke-linecap="round" stroke-linejoin="round" stroke-width="42" opacity="0.95">
+    <polyline points="372,560 512,470 652,560"/>
+    <polyline points="372,650 512,560 652,650" opacity="0.55"/>
+  </g>
+
+  <!-- victorious figure -->
+  <g fill="url(#fig)">
+    <!-- head -->
+    <circle cx="512" cy="312" r="80"/>
+    <!-- torso -->
+    <rect x="476" y="392" width="72" height="210" rx="36"/>
+    <!-- arms raised in V -->
+    <g stroke="url(#fig)" stroke-width="58" stroke-linecap="round">
+      <line x1="512" y1="430" x2="392" y2="312"/>
+      <line x1="512" y1="430" x2="632" y2="312"/>
+    </g>
+    <!-- legs in stride -->
+    <g stroke="url(#fig)" stroke-width="62" stroke-linecap="round">
+      <line x1="512" y1="585" x2="430" y2="720"/>
+      <line x1="512" y1="585" x2="598" y2="708"/>
+    </g>
+  </g>
+</svg>
