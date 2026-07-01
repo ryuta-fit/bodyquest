@@ -19,6 +19,7 @@ window.QUIZ_FIELDS = [
   { key: "special",            label: "特別対象・ライフ", emoji: "🧓", color: "#5a9bb0", desc: "高齢者・女性・小児・有疾患者への運動" },
   { key: "firstaid",           label: "救急・応急処置", emoji: "🚑", color: "#e8743c", desc: "BLS/CPR/AED・脳震盪・熱中症・EAP" },
   { key: "conditioning",       label: "コンディショニング", emoji: "🏃", color: "#9aa84a", desc: "SAQ・プライオ・リカバリー・負荷管理" },
+  { key: "evo",                label: "進化・発生・発達", emoji: "🧬", color: "#8455c9", desc: "比較解剖・進化・発生学・運動発達から見るヒトの体" },
 ];
 
 // Difficulty labels.
