@@ -5,7 +5,9 @@
 ユーザーのChromeを操作してChatGPT Plusで生成→ダウンロード→プロジェクトに保存→アプリが自動表示。
 
 ## 現在の進捗
-- 生成済み: **85/257枚**（目視で医学的正確性を確認済み）。anatomy 36枚完了→functional_anatomy(fa_001〜023)完了→assessment進行中(膝4/肩6/足4/腰1/股3/ROM4/MMT1/ランドマーク3/姿勢2=計26枚)。endocrineは安全フィルター回避で再生成成功。
+- 生成済み: **108/257枚**（目視で医学的正確性を確認済み）。anatomy 36枚完了→functional_anatomy(fa_001〜023)完了→assessment(33枚)完了→biomechanics進行中(18枚: ベクトル系/トルク系/てこ/機械的利益/安定性/ニュートン法則/力積運動量/地面反力)。endocrineは安全フィルター回避で再生成成功。
+- 注10: DLアイコンクリックが発火しないことが増えた→ライトボックスを開いた状態でJS-fetch(naturalWidth>700の最大blob, size>300000をa.click())でフルサイズ(1MB前後)確実取得。プレースホルダー誤取得防止にsize>300000条件必須。
+- 注9: 物理図でも稀に生成が詰まり読み込みプレースホルダー(虹色グラデ)のまま→新規チャットで再生成すると速い。mweb_fallbackのJS-fetchはプレースホルダーを誤取得するのでReadで内容確認必須。
 - 注8: タブグループが不安定に消えることあり→tabs_context_mcp(createIfEmpty:true)で再作成、navigate→tabs_create_mcp→navigateの順で2タブ再構築。
 - 注7: チャットを再navigateすると?mweb_fallback=1モードになりDLボタン(↓)が発火しない。その場合はライトボックスを開いた状態でJS-fetch(naturalWidth>500の最大blobをa.click()でDL、download属性に直接ファイル名指定)でフルサイズ取得可能。
 - 注6: ウィンドウサイズが変わることあり。1503幅→DLアイコン(1421,28)、1176幅→(1080,33)、1143幅→(1050,33)。画像中心はスクショで都度確認。
