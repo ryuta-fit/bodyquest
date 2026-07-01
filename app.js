@@ -196,7 +196,7 @@
     $("#nav").classList.remove("hidden");
     $("#tbStreak").textContent = `🔥 ${S.streak}`;
     $("#tbLv").textContent = `Lv.${S.lv}`;
-    $("#tbHearts").textContent = `❤️ ${S.hearts}`;
+    $("#tbHearts").style.display = "none";
     $("#tbXpFill").style.width = Math.min(100, (S.xp / xpForLv(S.lv)) * 100) + "%";
   }
 
@@ -356,7 +356,7 @@
           <div class="daily-info">
             <b>今日のゴール</b>
             <small>${S.dailyXp} / ${goal} XP ${pct >= 100 ? "・達成！🎉" : ""}</small>
-            <small>🔥 ${S.streak}日連続　Lv.${S.lv}　<span id="heartLine">❤️ ${S.hearts}${S.hearts < 5 ? "・" + heartTimerText() : ""}</span></small>
+            <small>🔥 ${S.streak}日連続　Lv.${S.lv}</small>
           </div>
         </div>
       </div>
@@ -386,13 +386,6 @@
     $("#homeTitle", s).addEventListener("click", renderBadges);
     const wc = $("#weakCard", s);
     if (wc && weak) wc.addEventListener("click", () => startQuiz(shuffle(fieldQuestions(weak.f.key)).slice(0, 10), { title: weak.f.label, color: weak.f.color }));
-    // live heart countdown
-    if (S.hearts < 5) _heartTimer = setInterval(() => {
-      regenHearts(); const hl = document.getElementById("heartLine");
-      if (!hl) { clearInterval(_heartTimer); _heartTimer = null; return; }
-      hl.textContent = `❤️ ${S.hearts}` + (S.hearts < 5 ? "・" + heartTimerText() : "");
-      if (S.hearts >= 5) { clearInterval(_heartTimer); _heartTimer = null; renderTopbar(); }
-    }, 1000);
   }
 
   function pickMixed(n) {
@@ -710,7 +703,6 @@
   let Q = null;
   function startQuiz(questions, opts) {
     if (!questions || !questions.length) return toast("問題がありません");
-    if (S.hearts <= 0) { regenHearts(); if (S.hearts <= 0) return toast("❤️が回復するまで待ってね（20分で1回復）"); }
     Q = { list: questions, i: 0, correct: 0, xp: 0, opts: opts || {}, answered: false, missed: [], combo: 0, maxCombo: 0 };
     drawQuestion();
   }
@@ -746,7 +738,6 @@
       <div class="quiz-top">
         <button class="quiz-x" id="quitQuiz">✕</button>
         <div class="qbar"><div class="qbar-fill" style="width:${prog}%"></div></div>
-        <span class="tb-hearts">❤️${S.hearts}</span>
       </div>
       <div class="q-meta">
         <span class="chip">${f.emoji || ""} ${f.label || ""}</span>
@@ -821,7 +812,7 @@
       sfx("correct"); haptic(20);
     } else {
       Q.combo = 0;
-      Q.missed.push(q); S.hearts = Math.max(0, S.hearts - 1); S.heartsTs = S.heartsTs || Date.now();
+      Q.missed.push(q);
       sfx("wrong"); haptic([0, 30, 20, 30]);
     }
     if (Q.maxCombo > S.bestCombo) S.bestCombo = Q.maxCombo;
