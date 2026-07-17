@@ -8,7 +8,11 @@
   const FIELDS = window.QUIZ_FIELDS;
   const CONTENT = window.QUIZ_CONTENT || {};
   const DIFF = window.QUIZ_DIFF;
-  const SAVE_KEY = "bodyquest_v1";
+  // Progress is stored per signed-in account: "bodyquest_v1:<uid>".
+  // The bare key is the pre-login legacy store, claimed once by the first account to sign in.
+  const LEGACY_KEY = "bodyquest_v1";
+  const OWNER_KEY = "bodyquest_owner_v1";
+  let SAVE_KEY = LEGACY_KEY;
   const DAILY_GOAL = 30; // XP target per day
 
   /* ---------- State ---------- */
@@ -21,6 +25,7 @@
     seen: {},           // questionId -> {n:timesSeen, c:timesCorrect, due:ts, ease}
     badges: {},         // badgeId -> earned timestamp
     title: null,        // equipped 称号 id (null = level rank)
+    displayName: null,  // ranking nickname (null = provider account name)
     onboarded: false,   // first-run tutorial shown?
     weekXp: 0, weekKey: null, lastWeekRank: null, // weekly league
     settings: { sound: true, haptics: true, reduceMotion: false, dailyGoal: 30, fontScale: 1 },
@@ -868,6 +873,7 @@
     const newBadges = checkBadges();   // award & collect newly earned 称号
     if (newBadges.length) S.title = newBadges[newBadges.length - 1].id; // auto-equip latest
     save();
+    syncCloud();
     renderTopbar();
     const s = $("#screen"); s.scrollTop = 0;
     const emoji = pct === 100 ? "🏆" : pct >= 70 ? "🎉" : pct >= 40 ? "💪" : "📖";
@@ -981,9 +987,27 @@
         <div style="flex:1"><b style="font-size:15px">${label}</b><div class="muted" style="font-size:12px">${desc}</div></div>
         <button class="switch ${on ? "on" : ""}" id="${id}" role="switch" aria-checked="${on}"><span></span></button>
       </div>`;
+    const u = window.BQAuth && BQAuth.user;
+    const account = `
+      <div class="card card-row">
+        ${u && u.photo ? `<img class="lg-av" src="${esc(u.photo)}" alt="" referrerpolicy="no-referrer">` : `<span class="lg-av lg-av-ph">🧑</span>`}
+        <div style="flex:1;min-width:0">
+          <b style="font-size:15px">${esc(accountName())}</b>
+          <div class="muted" style="font-size:12px">${u ? "ランキングに表示される名前です" : "ローカルモード（未ログイン）"}</div>
+        </div>
+        <button class="btn-sm" id="editName">変更</button>
+      </div>
+      ${u ? `<button class="btn ghost" id="signOut">ログアウト</button>
+      <div style="height:10px"></div>
+      <button class="btn ghost danger" id="delAccount">アカウントを削除</button>
+      <div class="muted" style="font-size:11px;margin:6px 2px 12px">
+        アカウントとランキングの記録、この端末の学習データが完全に削除されます。元に戻せません。</div>` : ""}`;
     s.innerHTML = `
       <button class="btn-sm" id="sback">← 記録へ</button>
       <h2 style="margin:14px 0">設定</h2>
+      <div class="section-title">アカウント</div>
+      ${account}
+      <div class="section-title">アプリ</div>
       ${tgl("setSound", st.sound, "🔊 効果音", "正解・称号獲得などで音を鳴らす")}
       ${tgl("setHaptics", st.haptics, "📳 触覚フィードバック", "回答時に端末を振動させる（対応端末のみ）")}
       ${tgl("setMotion", st.reduceMotion, "🎬 アニメ軽減", "紙吹雪などの演出を控えめにする")}
@@ -1003,7 +1027,7 @@
       </div>
       <button class="btn ghost" id="showTut">📘 チュートリアルをもう一度見る</button>
       <div style="height:10px"></div>
-      <div class="muted center" style="font-size:11px">BodyQuest ・ オフラインで動作・進捗は端末内に保存</div>
+      <div class="muted center" style="font-size:11px">BodyQuest ・ 学習は端末内に保存、スコアはランキングへ同期</div>
     `;
     $("#sback", s).addEventListener("click", () => go("stats"));
     const flip = (key, id) => $("#" + id, s).addEventListener("click", () => {
@@ -1017,13 +1041,48 @@
       st.fontScale = parseInt(b.dataset.fs, 10); save(); applyA11y(); renderSettings();
     }));
     $("#showTut", s).addEventListener("click", () => { S.onboarded = false; save(); showOnboarding(); });
+    $("#editName", s).addEventListener("click", () => {
+      const v = prompt("ランキングに表示する名前（12文字まで）", accountName());
+      if (v == null) return;
+      const name = v.trim().slice(0, 12);
+      if (!name) { toast("名前を入力してください"); return; }
+      S.displayName = name; save(); syncCloud(); renderSettings(); toast("表示名を変更しました");
+    });
+    const so = $("#signOut", s);
+    if (so) so.addEventListener("click", async () => {
+      if (!confirm("ログアウトしますか？（学習データはアカウントに紐づいて残ります）")) return;
+      try { await BQAuth.signOut(); } catch (e) { toast("ログアウトできませんでした"); }
+    });
+    const da = $("#delAccount", s);
+    if (da) da.addEventListener("click", async () => {
+      // 取り返しがつかないので二段階で確認する
+      if (!confirm("本当にアカウントを削除しますか？\n\n・ランキングの記録\n・レベル/称号/学習の進捗\n\nすべて完全に削除され、元に戻せません。")) return;
+      const v = prompt("確認のため 削除 と入力してください", "");
+      if (v === null) return;
+      if (v.trim() !== "削除") { toast("入力が一致しないため中止しました"); return; }
+      da.disabled = true; da.textContent = "削除中…";
+      try {
+        await BQAuth.deleteAccount();
+        alert("アカウントを削除しました。ご利用ありがとうございました。");
+        location.reload();
+      } catch (e) {
+        da.disabled = false; da.textContent = "アカウントを削除";
+        if (e && e.code === "auth/requires-recent-login") {
+          if (confirm("セキュリティのため再ログインが必要です。いちどログアウトしますか？\n（再ログイン後、もう一度削除をお試しください）")) {
+            try { await BQAuth.signOut(); } catch (_) {}
+          }
+          return;
+        }
+        alert("削除できませんでした：" + ((e && e.message) || "不明なエラー"));
+      }
+    });
   }
 
   /* ============================================================
      ONBOARDING (first-run tutorial)
      ============================================================ */
   const TUT_SLIDES = [
-    { emoji: "🩺", title: "BodyQuestへようこそ", body: "トレーナー／セラピストのための知識アプリ。8分野・約1000問を、ゲーム感覚で身につけよう。" },
+    { emoji: "🩺", title: "BodyQuestへようこそ", body: `トレーナー／セラピストのための知識アプリ。${FIELDS.length}分野・${allQuestions().length.toLocaleString()}問を、ゲーム感覚で身につけよう。` },
     { emoji: "⚡", title: "解いて・間違えて・伸びる", body: "クイズに答えるとXPが貯まりレベルアップ。間違えた問題は教材へジャンプして深く学べます。" },
     { emoji: "🔁", title: "復習で記憶に定着", body: "間隔反復で最適なタイミングに復習が出題。連続正解のコンボでXPボーナスも！" },
     { emoji: "🏅", title: "称号を集めよう", body: "レベルや分野の習得で称号を獲得。レアリティ付きでコレクション性も抜群。さあ始めよう！" },
@@ -1068,37 +1127,95 @@
   /* ============================================================
      WEEKLY LEAGUE  (週間リーグ)
      ============================================================ */
+  let _lgKind = "week"; // week | all
+
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]); }
+
+  function lgRow(x, i) {
+    const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `<span class="lg-rank">${i + 1}</span>`;
+    const av = x.photo
+      ? `<img class="lg-av" src="${esc(x.photo)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">`
+      : `<span class="lg-av lg-av-ph" aria-hidden="true">🧑</span>`;
+    return `<div class="lg-row ${x.me ? "me" : ""}">
+      <div class="lg-pos">${medal}</div>
+      ${av}
+      <div class="lg-name">${esc(x.name)}${x.me ? ' <span class="lg-you">あなた</span>' : ""}
+        <div class="lg-sub muted">${esc(x.title || `Lv.${x.lv || 1}`)}</div></div>
+      <div class="lg-xp">${(x.xp || 0).toLocaleString()} XP</div>
+    </div>`;
+  }
+
   function renderLeague() {
     const s = $("#screen"); s.scrollTop = 0;
     document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.route === "stats"));
     regenWeek();
     const w = weekInfo();
     const tier = leagueTier();
-    const me = { name: "あなた", xp: S.weekXp, me: true };
-    const board = leagueRivals().concat([me]).sort((a, b) => b.xp - a.xp);
-    const myRank = board.findIndex(x => x.me) + 1;
     const daysLeft = Math.max(0, Math.ceil((w.end - Date.now()) / 86400000));
-    const rows = board.map((x, i) => {
-      const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `<span class="lg-rank">${i + 1}</span>`;
-      return `<div class="lg-row ${x.me ? "me" : ""}">
-        <div class="lg-pos">${medal}</div>
-        <div class="lg-name">${x.me ? "🔵 " : ""}${x.name}</div>
-        <div class="lg-xp">${x.xp} XP</div>
-      </div>`;
-    }).join("");
-    s.innerHTML = `
+    const head = `
       <button class="btn-sm" id="lgback">← 記録へ</button>
       <div class="hero" style="margin-top:12px;background:linear-gradient(135deg,${tier.color}33,#231d3a)">
-        <div class="muted" style="font-size:11px">今週のリーグ</div>
+        <div class="muted" style="font-size:11px">ランキング</div>
         <h1 style="color:${tier.color}">${tier.emoji} ${tier.name}リーグ</h1>
-        <p>今週の順位 <b>${myRank}位</b> / ${board.length}人　・　残り <b>${daysLeft}</b>日<br>XPを稼いで上位を目指そう（対戦相手はデモ）</p>
+        <p id="lgHead">読み込み中…</p>
       </div>
-      <div class="lg-board">${rows}</div>
+      <div class="pill-select lg-tabs" id="lgTabs">
+        <button class="pill ${_lgKind === "week" ? "on" : ""}" data-k="week">今週（残り${daysLeft}日）</button>
+        <button class="pill ${_lgKind === "all" ? "on" : ""}" data-k="all">総合</button>
+      </div>
+      <div class="lg-board" id="lgBoard"><div class="muted center" style="padding:24px">読み込み中…</div></div>
       <div style="height:10px"></div>
-      <button class="btn lg" id="lgplay">⚡ XPを稼ぐ（10問）</button>
-    `;
+      <button class="btn lg" id="lgplay">⚡ XPを稼ぐ（10問）</button>`;
+    s.innerHTML = head;
     $("#lgback", s).addEventListener("click", () => go("stats"));
     $("#lgplay", s).addEventListener("click", () => startQuiz(pickMixed(10), { title: "リーグ" }));
+    s.querySelectorAll("#lgTabs .pill").forEach(b => b.addEventListener("click", () => {
+      _lgKind = b.dataset.k; sfx("tap"); renderLeague();
+    }));
+    loadBoard();
+  }
+
+  async function loadBoard() {
+    const board = $("#lgBoard"), head = $("#lgHead");
+    if (!board) return;
+    const uid = (window.BQAuth && BQAuth.user && BQAuth.user.uid) || null;
+    const w = weekInfo();
+    let rows = null;
+    if (window.BQCloud && BQCloud.online) {
+      // 自分の最新スコアを載せてから取得（順位に即反映させる）
+      syncCloud();
+      try { rows = await BQCloud.fetchLeaderboard(_lgKind, w.key, 50); } catch (e) { rows = null; }
+    }
+    if (!$("#lgBoard")) return; // 画面が切り替わった
+
+    if (rows) {
+      const key = _lgKind === "week" ? "weekXp" : "totalXp";
+      let list = rows.map(r => ({
+        name: r.name || "名無しトレーナー", photo: r.photo, title: r.title, lv: r.lv,
+        xp: r[key] || 0, me: uid && r.uid === uid,
+      }));
+      // 自分のドキュメントがまだ届いていない場合でも自分を必ず表示する
+      if (uid && !list.some(x => x.me)) {
+        const p = myProfile();
+        list.push({ name: p.name, photo: (BQAuth.user || {}).photo, title: p.title, lv: p.lv, xp: _lgKind === "week" ? p.weekXp : p.totalXp, me: true });
+      }
+      list.sort((a, b) => b.xp - a.xp);
+      const myRank = list.findIndex(x => x.me) + 1;
+      board.innerHTML = list.length ? list.map(lgRow).join("")
+        : `<div class="muted center" style="padding:24px">まだ参加者がいません。<br>最初の1位を取ろう！</div>`;
+      if (head) head.innerHTML = myRank
+        ? `${_lgKind === "week" ? "今週" : "総合"}の順位 <b>${myRank}位</b> / ${list.length}人<br>XPを稼いで上位を目指そう`
+        : `XPを稼いでランキングに参加しよう`;
+      return;
+    }
+
+    // オフライン / 未設定 — 従来のデモ相手にフォールバック
+    const me = { name: accountName(), xp: _lgKind === "week" ? S.weekXp : lifetimeXp(), me: true, lv: S.lv, title: `${equippedTitle().emoji} ${equippedTitle().label}` };
+    const list = leagueRivals().concat([me]).sort((a, b) => b.xp - a.xp);
+    const myRank = list.findIndex(x => x.me) + 1;
+    board.innerHTML = list.map(lgRow).join("");
+    if (head) head.innerHTML = `${_lgKind === "week" ? "今週" : "総合"}の順位 <b>${myRank}位</b> / ${list.length}人<br>
+      <span class="muted" style="font-size:11px">⚠️ オフラインのためデモ相手を表示中</span>`;
   }
 
   /* ============================================================
@@ -1149,12 +1266,125 @@
     }));
   }
 
+  /* ============================================================
+     ACCOUNT — login gate & cloud profile sync
+     ============================================================ */
+  // Point the local store at this account, migrating the pre-login store once.
+  function bindSaveKey(uid) {
+    if (!uid) return;
+    const key = LEGACY_KEY + ":" + uid;
+    if (!localStorage.getItem(key)) {
+      const legacy = localStorage.getItem(LEGACY_KEY);
+      if (legacy && !localStorage.getItem(OWNER_KEY)) {
+        try { localStorage.setItem(key, legacy); localStorage.setItem(OWNER_KEY, uid); } catch (e) {}
+      }
+    }
+    SAVE_KEY = key;
+    S = load();
+  }
+
+  function accountName() {
+    const u = window.BQAuth && BQAuth.user;
+    return S.displayName || (u && u.name) || "名無しトレーナー";
+  }
+  // XP earned over the whole account life (S.xp is only the progress into the current level).
+  function lifetimeXp() { let t = S.xp; for (let l = 1; l < S.lv; l++) t += xpForLv(l); return t; }
+  function myProfile() {
+    regenWeek();
+    const t = equippedTitle();
+    return {
+      name: accountName(), lv: S.lv, totalXp: lifetimeXp(),
+      weekXp: S.weekXp, weekKey: S.weekKey, streak: S.streak,
+      answered: S.totalAnswered,
+      accuracy: S.totalAnswered ? Math.round((S.totalCorrect / S.totalAnswered) * 100) : 0,
+      title: `${t.emoji} ${t.label}`,
+    };
+  }
+  function syncCloud() { if (window.BQCloud) BQCloud.pushProfile(myProfile()); }
+
+  // Dev escape hatch: only when Firebase is unconfigured AND we're on localhost.
+  function devBypassAllowed() {
+    return !(window.BQAuth && BQAuth.configured) &&
+      /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+  }
+
+  function renderLogin(msg) {
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+    $("#topbar").classList.add("hidden");
+    $("#nav").classList.add("hidden");
+    const s = $("#screen"); s.scrollTop = 0;
+    const A = window.BQAuth;
+    const provs = A ? A.enabledProviders() : [];
+    const btns = provs.map(k => {
+      const m = A.providerMeta[k];
+      return `<button class="btn login-btn prov-${k}" data-prov="${k}">
+        <span class="lb-icon" aria-hidden="true">${m.emoji}</span><span>${m.label}</span></button>`;
+    }).join("");
+    const notice = !A || !A.configured
+      ? `<div class="card" style="border-color:#e2555555;background:#2a1a1a;text-align:left">
+           <b style="color:#ff8a8a">⚠️ ログイン機能がセットアップされていません</b>
+           <div class="muted" style="font-size:12px;margin-top:6px">
+             Firebase プロジェクトを作成し <code>firebase-config.js</code> に設定値を貼り付けてください。
+             手順は <b>FIREBASE_SETUP.md</b> にあります。</div>
+         </div>`
+      : "";
+    s.innerHTML = `
+      <div class="login-wrap">
+        <div class="login-logo">🩺</div>
+        <h1 class="login-title">BodyQuest</h1>
+        <p class="login-lead">トレーナー・セラピストの知識ゲーム<br>
+          <b>${FIELDS.length}分野・${allQuestions().length.toLocaleString()}問</b></p>
+        <p class="muted login-note">続けるにはログインが必要です。<br>進捗と順位はアカウントに保存され、機種変更しても引き継げます。</p>
+        ${notice}
+        ${msg ? `<div class="card center" style="border-color:#e2555555;background:#2a1a1a;color:#ff8a8a;font-size:13px">${msg}</div>` : ""}
+        <div class="login-btns">${btns || `<div class="muted center" style="font-size:12px">利用できるログイン方法がありません</div>`}</div>
+        ${devBypassAllowed() ? `<button class="btn ghost" id="devSkip">設定せずに試す（開発用・localhostのみ）</button>` : ""}
+        <p class="muted login-terms">ログインすると利用規約・プライバシーポリシーに同意したものとみなされます。<br>
+          取得するのは表示名・アイコン・学習スコアのみです。</p>
+      </div>
+    `;
+    s.querySelectorAll(".login-btn").forEach(b => b.addEventListener("click", async () => {
+      const key = b.dataset.prov;
+      b.disabled = true; b.classList.add("loading");
+      const label = b.innerHTML; b.innerHTML = `<span>ログイン中…</span>`;
+      try {
+        await BQAuth.signIn(key);
+        // 成功時は onChange → startApp() が画面を差し替える
+      } catch (e) {
+        b.disabled = false; b.classList.remove("loading"); b.innerHTML = label;
+        const code = (e && e.code) || "";
+        renderLogin(/network/.test(code) ? "通信に失敗しました。接続を確認してもう一度お試しください。"
+          : /cancel|closed/.test(code) ? "ログインがキャンセルされました。"
+          : "ログインできませんでした。しばらくしてからお試しください。");
+      }
+    }));
+    const dev = $("#devSkip", s);
+    if (dev) dev.addEventListener("click", () => { bindSaveKey("dev-local"); startApp(); });
+  }
+
   /* ---------- Boot ---------- */
+  let _appStarted = false;
+  function startApp() {
+    if (_appStarted) return; _appStarted = true;
+    applyA11y(); checkBadges(); renderTopbar(); go("home");
+    syncCloud();
+    if (!S.onboarded) setTimeout(showOnboarding, 350);
+  }
+
   let _booted = false;
   function boot() {
     if (_booted) return; _booted = true;
-    applyA11y(); checkBadges(); renderTopbar(); go("home");
-    if (!S.onboarded) setTimeout(showOnboarding, 350);
+    applyA11y();
+    const A = window.BQAuth;
+    if (!A) { renderLogin(); return; }
+    $("#screen").innerHTML = `<div class="login-wrap"><div class="login-logo">🩺</div>
+      <p class="muted center">読み込み中…</p></div>`;
+    A.onChange((u, st) => {
+      if (st === "loading") return;
+      if (u) { bindSaveKey(u.uid); startApp(); }
+      else if (!_appStarted) renderLogin();
+      else location.reload(); // サインアウト後はクリーンな状態でログイン画面へ
+    });
   }
   window.addEventListener("load", boot);
   // In case load already fired

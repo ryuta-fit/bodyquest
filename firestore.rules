@@ -1,0 +1,42 @@
+rules_version = '2';
+
+// BodyQuest — ランキング用の最小ルール
+// Firebase コンソール ▸ Firestore Database ▸ ルール にそのまま貼り付けて公開してください。
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{uid} {
+      // ランキングは全ログインユーザーが閲覧できる
+      allow read: if request.auth != null;
+
+      // 書き込めるのは本人のドキュメントだけ
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && validProfile(request.resource.data);
+
+      // 本人によるアカウント削除のみ許可
+      // (App Store 審査ガイドライン 5.1.1(v): アカウント作成を提供するアプリは
+      //  アプリ内でのアカウント削除も提供しなければならない)
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // 上記以外は全面禁止
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function validProfile(d) {
+      return d.uid == request.auth.uid
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 12
+        && d.lv is int && d.lv >= 1 && d.lv <= 999
+        && d.totalXp is int && d.totalXp >= 0 && d.totalXp <= 10000000
+        && d.weekXp is int && d.weekXp >= 0 && d.weekXp <= 10000000
+        && d.streak is int && d.streak >= 0
+        && d.answered is int && d.answered >= 0
+        && d.accuracy is int && d.accuracy >= 0 && d.accuracy <= 100
+        // スコアは単調増加のみ（下げてのリセットや巻き戻しを防ぐ）
+        && (!exists(/databases/$(database)/documents/users/$(request.auth.uid))
+            || d.totalXp >= resource.data.totalXp);
+    }
+  }
+}

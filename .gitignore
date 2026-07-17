@@ -1,4 +1,15 @@
 node_modules/
 ios/
+android/
 .DS_Store
 *.log
+AuthKey_*.p8
+# Android signing secrets (never commit)
+keystore.properties
+*.keystore
+*.jks
+# Firebase CLI cache
+.firebase/
+.firebaserc
+# Build artifacts (xcarchive etc, ~250MB)
+build/

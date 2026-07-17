@@ -4,14 +4,17 @@
   "private": true,
   "description": "BodyQuest - トレーナー/セラピスト向けゲーム型学習アプリ",
   "scripts": {
-    "copyweb": "rm -rf www && mkdir -p www && rsync -a --exclude node_modules --exclude www --exclude ios --exclude .claude --exclude package.json --exclude package-lock.json --exclude capacitor.config.json index.html styles.css app.js content www/",
+    "copyweb": "rm -rf www && mkdir -p www && rsync -a --exclude node_modules --exclude www --exclude ios --exclude .claude --exclude package.json --exclude package-lock.json --exclude capacitor.config.json index.html styles.css app.js firebase-config.js auth.js content www/",
     "sync": "npm run copyweb && cap sync ios",
     "open:ios": "cap open ios"
   },
   "dependencies": {
+    "@capacitor-firebase/authentication": "^8.3.0",
+    "@capacitor/android": "^8.4.1",
     "@capacitor/cli": "^8.4.1",
     "@capacitor/core": "^8.4.1",
-    "@capacitor/ios": "^8.4.1"
+    "@capacitor/ios": "^8.4.1",
+    "firebase": "^12.16.0"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",

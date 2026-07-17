@@ -1,5 +1,11 @@
 {
   "appId": "com.bodyquest.app",
   "appName": "BodyQuest",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "FirebaseAuthentication": {
+      "skipNativeAuth": true,
+      "providers": ["google.com", "apple.com"]
+    }
+  }
 }

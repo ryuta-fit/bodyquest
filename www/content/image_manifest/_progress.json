@@ -1,15 +1,20 @@
 {
  "mode": "2tab-freshchat",
+ "note": "browser=Browser2(deviceId ff9f4c2c). physiology field. generating. wait ~2-3min. DL: JS-fetch(naturalWidth>1200) first; fallback lightbox DL icon(1503->1421,28 / 1564->1478,29) then newest ChatGPT Image*.png age<60s. VERIFY chat content.",
  "tabs": {
-  "1554241104": {
-   "state": "awaiting",
-   "pending": "fa_img_018",
-   "pendingFile": "functional_anatomy/fa_img_018.png"
+  "tab1": {
+   "tabId": 1554242125,
+   "state": "generating",
+   "pending": "phy_img_002",
+   "pendingFile": "physiology/phy_img_002.png",
+   "chatUrl": "https://chatgpt.com/c/6a44bd28-a670-83e8-a228-d8c042c57652"
   },
-  "1554241105": {
-   "state": "awaiting",
-   "pending": "fa_img_019",
-   "pendingFile": "functional_anatomy/fa_img_019.png"
+  "tab2": {
+   "tabId": 1554242129,
+   "state": "generating",
+   "pending": "phy_img_003",
+   "pendingFile": "physiology/phy_img_003.png",
+   "chatUrl": ""
   }
  }
 }

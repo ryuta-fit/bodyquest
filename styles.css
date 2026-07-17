@@ -324,3 +324,31 @@ body.reduce-motion *{animation-duration:.001s !important;transition-duration:.00
 .gen-fig-wrap.lesson-photo{max-width:100%}
 .gen-fig-wrap.fb-photo{margin:10px 0 4px;max-width:260px;border-radius:12px}
 .gen-fig-wrap.fb-photo .gen-fig{max-height:300px;width:auto;margin:0 auto}
+
+/* ===== Login gate ===== */
+.login-wrap{max-width:420px;margin:0 auto;padding:34px 4px 20px;text-align:center}
+.login-logo{font-size:64px;line-height:1;margin-bottom:10px}
+.login-title{font-size:32px;font-weight:900;letter-spacing:.02em;margin:0 0 6px}
+.login-lead{font-size:14px;color:var(--txt2);margin:0 0 18px;line-height:1.7}
+.login-note{font-size:12px;line-height:1.8;margin:0 0 18px}
+.login-btns{display:flex;flex-direction:column;gap:10px;margin:14px 0 16px}
+.login-btn{display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:800}
+.login-btn .lb-icon{font-size:18px;line-height:1}
+.login-btn.prov-google{background:#fff;color:#1f1f1f;border:1px solid #dadce0}
+.login-btn.prov-apple{background:#000;color:#fff;border:1px solid #444}
+.login-btn.prov-twitter{background:#000;color:#fff;border:1px solid #444}
+.login-btn.prov-facebook{background:#1877f2;color:#fff;border:1px solid #1877f2}
+.login-btn.loading{opacity:.6}
+.login-terms{font-size:10px;line-height:1.7;margin-top:18px}
+
+/* ===== Leaderboard extras ===== */
+.lg-tabs{margin-top:12px}
+.lg-av{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#2a2f3a;flex:none}
+.lg-av-ph{display:flex;align-items:center;justify-content:center;font-size:16px}
+.lg-name{min-width:0;overflow:hidden}
+.lg-sub{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lg-you{font-size:10px;font-weight:800;color:#fff;background:var(--accent);border-radius:20px;padding:1px 6px;vertical-align:middle}
+
+/* Destructive action (account deletion) */
+.btn.ghost.danger{color:#ff8a8a;border-color:#e2555555}
+.btn.ghost.danger:disabled{opacity:.5}
