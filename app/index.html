@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#0f1115" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>BodyQuest｜トレーナー・セラピストの知識ゲーム</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+  <!-- Topbar -->
+  <header id="topbar" class="hidden">
+    <div class="tb-left">
+      <span class="tb-streak" id="tbStreak">🔥 0</span>
+    </div>
+    <div class="tb-center">
+      <div class="tb-xpbar"><div class="tb-xpfill" id="tbXpFill"></div></div>
+      <span class="tb-lv" id="tbLv">Lv.1</span>
+    </div>
+    <div class="tb-right">
+      <span class="tb-hearts" id="tbHearts">❤️ 5</span>
+    </div>
+  </header>
+
+  <!-- Screen container -->
+  <main id="screen"></main>
+
+  <!-- Bottom nav -->
+  <nav id="nav" class="hidden" aria-label="メインナビゲーション">
+    <button data-route="home" class="nav-btn active" aria-label="ホーム"><span aria-hidden="true">🏠</span><label>ホーム</label></button>
+    <button data-route="fields" class="nav-btn" aria-label="分野"><span aria-hidden="true">📚</span><label>分野</label></button>
+    <button data-route="learn" class="nav-btn" aria-label="教材"><span aria-hidden="true">📖</span><label>教材</label></button>
+    <button data-route="review" class="nav-btn" aria-label="復習"><span aria-hidden="true">🔁</span><label>復習</label></button>
+    <button data-route="stats" class="nav-btn" aria-label="記録"><span aria-hidden="true">📊</span><label>記録</label></button>
+  </nav>
+</div>
+
+<!-- Content modules (each pushes into window.QUIZ_CONTENT) -->
+<script src="content/index.js?v=20260701a"></script>
+<script src="content/anatomy.js"></script>
+<script src="content/physiology.js"></script>
+<script src="content/functional_anatomy.js"></script>
+<script src="content/nutrition.js"></script>
+<script src="content/biomechanics.js"></script>
+<script src="content/kinesiology.js"></script>
+<script src="content/assessment.js"></script>
+<script src="content/rehab.js"></script>
+
+<!-- Question expansions (+45 each, IDs 201+) -->
+<script src="content/anatomy_ext.js"></script>
+<script src="content/physiology_ext.js"></script>
+<script src="content/functional_anatomy_ext.js"></script>
+<script src="content/nutrition_ext.js"></script>
+<script src="content/biomechanics_ext.js"></script>
+<script src="content/kinesiology_ext.js"></script>
+<script src="content/assessment_ext.js"></script>
+<script src="content/rehab_ext.js"></script>
+
+<!-- Question expansion batches (IDs 301+/451+/601+) -->
+<script src="content/anatomy_b1.js"></script>
+<script src="content/anatomy_b2.js"></script>
+<script src="content/anatomy_b3.js"></script>
+<script src="content/physiology_b1.js"></script>
+<script src="content/physiology_b2.js"></script>
+<script src="content/physiology_b3.js"></script>
+<script src="content/functional_anatomy_b1.js"></script>
+<script src="content/functional_anatomy_b2.js"></script>
+<script src="content/functional_anatomy_b3.js"></script>
+<script src="content/nutrition_b1.js"></script>
+<script src="content/nutrition_b2.js"></script>
+<script src="content/nutrition_b3.js"></script>
+<script src="content/biomechanics_b1.js"></script>
+<script src="content/biomechanics_b2.js"></script>
+<script src="content/biomechanics_b3.js"></script>
+<script src="content/kinesiology_b1.js"></script>
+<script src="content/kinesiology_b2.js"></script>
+<script src="content/kinesiology_b3.js"></script>
+<script src="content/assessment_b1.js"></script>
+<script src="content/assessment_b2.js"></script>
+<script src="content/assessment_b3.js"></script>
+<script src="content/rehab_b1.js"></script>
+<script src="content/rehab_b2.js"></script>
+<script src="content/rehab_b3.js"></script>
+
+<!-- 現場・実務 (practice field) -->
+<script src="content/practice_a.js"></script>
+<script src="content/practice_b.js"></script>
+<script src="content/practice_c.js"></script>
+
+<!-- Expansion toward ~980/field (IDs 801+), diverse-lens batches -->
+<script src="content/anatomy_x1.js"></script>
+<script src="content/anatomy_x2.js"></script>
+<script src="content/anatomy_x3.js"></script>
+<script src="content/anatomy_x4.js"></script>
+<script src="content/physiology_x1.js"></script>
+<script src="content/physiology_x2.js"></script>
+<script src="content/physiology_x3.js"></script>
+<script src="content/physiology_x4.js"></script>
+<script src="content/functional_anatomy_x1.js"></script>
+<script src="content/functional_anatomy_x2.js"></script>
+<script src="content/functional_anatomy_x3.js"></script>
+<script src="content/functional_anatomy_x4.js"></script>
+<script src="content/nutrition_x1.js"></script>
+<script src="content/nutrition_x2.js"></script>
+<script src="content/nutrition_x3.js"></script>
+<script src="content/nutrition_x4.js"></script>
+<script src="content/nutrition_x5.js"></script>
+<script src="content/biomechanics_x1.js"></script>
+<script src="content/biomechanics_x2.js"></script>
+<script src="content/biomechanics_x3.js"></script>
+<script src="content/biomechanics_x4.js"></script>
+<script src="content/kinesiology_x1.js"></script>
+<script src="content/kinesiology_x2.js"></script>
+<script src="content/kinesiology_x3.js"></script>
+<script src="content/kinesiology_x4.js"></script>
+<script src="content/assessment_x1.js"></script>
+<script src="content/assessment_x2.js"></script>
+<script src="content/assessment_x3.js"></script>
+<script src="content/assessment_x4.js"></script>
+<script src="content/rehab_x1.js"></script>
+<script src="content/rehab_x2.js"></script>
+<script src="content/rehab_x3.js"></script>
+<script src="content/rehab_x4.js"></script>
+<script src="content/practice_x1.js"></script>
+<script src="content/practice_x2.js"></script>
+<script src="content/practice_x3.js"></script>
+<script src="content/practice_x4.js"></script>
+<script src="content/practice_x5.js"></script>
+<script src="content/practice_x6.js"></script>
+
+<!-- New fields: 東洋医学/エクササイズ技術/疼痛科学/スポーツ心理 -->
+<script src="content/toyo_a.js"></script>
+<script src="content/toyo_b.js"></script>
+<script src="content/toyo_c.js"></script>
+<script src="content/exercise_a.js"></script>
+<script src="content/exercise_b.js"></script>
+<script src="content/exercise_c.js"></script>
+<script src="content/pain_a.js"></script>
+<script src="content/pain_b.js"></script>
+<script src="content/pain_c.js"></script>
+<script src="content/psych_a.js"></script>
+<script src="content/psych_b.js"></script>
+<script src="content/psych_c.js"></script>
+
+<!-- New-field expansion toward ~980 (IDs 801+, diverse-lens batches) -->
+<script src="content/toyo_y1.js"></script>
+<script src="content/toyo_y2.js"></script>
+<script src="content/toyo_y3.js"></script>
+<script src="content/toyo_y4.js"></script>
+<script src="content/toyo_y5.js"></script>
+<script src="content/toyo_y6.js"></script>
+<script src="content/exercise_y1.js"></script>
+<script src="content/exercise_y2.js"></script>
+<script src="content/exercise_y3.js"></script>
+<script src="content/exercise_y4.js"></script>
+<script src="content/exercise_y5.js"></script>
+<script src="content/exercise_y6.js"></script>
+<script src="content/pain_y1.js"></script>
+<script src="content/pain_y2.js"></script>
+<script src="content/pain_y3.js"></script>
+<script src="content/pain_y4.js"></script>
+<script src="content/pain_y5.js"></script>
+<script src="content/pain_y6.js"></script>
+<script src="content/psych_y1.js"></script>
+<script src="content/psych_y2.js"></script>
+<script src="content/psych_y3.js"></script>
+<script src="content/psych_y4.js"></script>
+<script src="content/psych_y5.js"></script>
+<script src="content/psych_y6.js"></script>
+
+<!-- New fields: 特別対象・ライフ/救急・応急処置/コンディショニング -->
+<script src="content/special_1.js"></script>
+<script src="content/special_2.js"></script>
+<script src="content/special_3.js"></script>
+<script src="content/special_4.js"></script>
+<script src="content/special_5.js"></script>
+<script src="content/firstaid_1.js"></script>
+<script src="content/firstaid_2.js"></script>
+<script src="content/firstaid_3.js"></script>
+<script src="content/firstaid_4.js"></script>
+<script src="content/firstaid_5.js"></script>
+<script src="content/conditioning_1.js"></script>
+<script src="content/conditioning_2.js"></script>
+<script src="content/conditioning_3.js"></script>
+<script src="content/conditioning_4.js"></script>
+<script src="content/conditioning_5.js"></script>
+
+<!-- New field: 進化・発生・発達 (evo) -->
+<script src="content/evo_1.js"></script>
+<script src="content/evo_2.js"></script>
+<script src="content/evo_3.js"></script>
+<script src="content/evo_4.js"></script>
+<script src="content/evo_5.js"></script>
+<script src="content/evo_x1.js"></script>
+<script src="content/evo_x2.js"></script>
+<script src="content/evo_x3.js"></script>
+<script src="content/evo_x4.js"></script>
+
+<!-- Schematic figures (window.FIGURES / FIGURE_MAP) -->
+<script src="content/figures.js?v=20260629d"></script>
+<!-- References (window.FIELD_REFS) -->
+<script src="content/refs.js"></script>
+
+<!-- Learn material (each pushes into window.LEARN_CONTENT) -->
+<script src="content/learn/anatomy.js"></script>
+<script src="content/learn/physiology.js"></script>
+<script src="content/learn/functional_anatomy.js"></script>
+<script src="content/learn/nutrition.js"></script>
+<script src="content/learn/biomechanics.js"></script>
+<script src="content/learn/kinesiology.js"></script>
+<script src="content/learn/assessment.js"></script>
+<script src="content/learn/rehab.js"></script>
+<script src="content/learn/practice.js"></script>
+<script src="content/learn/toyo.js"></script>
+<script src="content/learn/exercise.js"></script>
+<script src="content/learn/pain.js"></script>
+<script src="content/learn/psych.js"></script>
+<script src="content/learn/special.js"></script>
+<script src="content/learn/firstaid.js"></script>
+<script src="content/learn/conditioning.js"></script>
+<script src="content/learn/evo.js"></script>
+
+<!-- Generated images (question -> concept image map; missing files self-hide) -->
+<script src="content/gen_images.js?v=20260701webp"></script>
+
+<!-- Auth & cloud ranking (Firebase) -->
+<script src="firebase-config.js?v=20260717d"></script>
+<script src="auth.js?v=20260717d"></script>
+
+<!-- 開発者応援（応援課金 / tip jar） -->
+<script src="support.js?v=20260717s"></script>
+
+<!-- App -->
+<script src="app.js?v=20260717d"></script>
+</body>
+</html>

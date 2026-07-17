@@ -1,239 +1,2426 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-<meta name="theme-color" content="#0f1115" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>BodyQuest｜トレーナー・セラピストの知識ゲーム</title>
-<link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BodyQuest — 身体の知を、毎日ひとくち。</title>
+<meta name="description" content="トレーナー・セラピストのための、ゲーム感覚で学ぶ身体知識アプリ。17分野・15,000問以上・図解280点以上、全機能無料。App Storeで配信中。">
+<meta name="theme-color" content="#FBFBFD">
+<meta property="og:title" content="BodyQuest — 身体の知を、毎日ひとくち。">
+<meta property="og:description" content="17分野・15,000問以上を、RPGのように毎日ひとくちずつ。トレーナー・セラピストのための学習アプリ。">
+<meta property="og:type" content="website">
+<style>
+:root{
+  /* ===== Base neutrals (Apple-quiet, paper-light) ===== */
+  --bg:#FBFBFD; --bg-alt:#F5F5F7; --surface:#FFFFFF; --surface-2:#F2F2F4;
+  --fg:#1D1D1F; --fg-soft:#3A3A3C; --muted:#6E6E73; --muted-2:#86868B;
+  --line:#E6E6EA; --line-strong:#D6D6DB;
+
+  /* ===== Signature accents (朱=炎/XP・藍=知) ===== */
+  --accent:#E0492E; --accent-press:#C13B23; --accent-soft:#FBE9E4;
+  --accent-2:#2E6F7E; --accent-2-soft:#E4EEF0; --gold:#C79A3A;
+
+  /* ===== Dark realm (game / cta の鍛錬場) ===== */
+  --dark-bg:#08090D; --dark-bg-2:#0E1016; --dark-surface:#111319; --dark-surface-2:#171A22;
+  --dark-line:#23262F; --dark-fg:#F4F5F7; --dark-muted:#8A9099; --dark-muted-2:#6B7078;
+  --xp-cyan:#38E1FF; --xp-violet:#8B5CFF;
+  --xp-grad:linear-gradient(90deg,#38E1FF,#8B5CFF);
+  --flame-grad:linear-gradient(180deg,#FFB03A,#E0492E 55%,#B4241A);
+
+  /* ===== レアリティ(称号56種・5段階) ===== */
+  --rar-common:#9AA0A6; --rar-uncommon:#3E8E6E; --rar-rare:#3B7DD8; --rar-epic:#8B5CFF; --rar-mythic:#E0492E;
+
+  /* ===== 17分野固有カラー(彩度を抑えたApple調・全て識別可能) ===== */
+  --field-anatomy:#C0453B; --field-functional_anatomy:#B85C6A; --field-kinesiology:#C7773A;
+  --field-biomechanics:#B08A2E; --field-physiology:#A85A45; --field-exercise:#5E7E3A;
+  --field-conditioning:#3E8E6E; --field-nutrition:#7A9A3C; --field-assessment:#3E7E8E;
+  --field-pain:#C24A6A; --field-rehab:#4A80C0; --field-firstaid:#D14B4B;
+  --field-special:#7A6BC0; --field-psych:#8A5BB0; --field-practice:#5E6E7E;
+  --field-toyo:#2E6F7E; --field-evo:#6E8A4A;
+
+  /* ===== Spacing (8pxベース) ===== */
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px; --s8:128px; --s9:160px;
+
+  /* ===== Radii ===== */
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --r-xl:32px; --r-pill:999px; --r-device:44px;
+
+  /* ===== Shadows (繊細・低コントラスト) ===== */
+  --sh-1:0 1px 2px rgba(0,0,0,.04),0 1px 1px rgba(0,0,0,.03);
+  --sh-2:0 4px 16px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);
+  --sh-3:0 12px 40px rgba(0,0,0,.10),0 2px 8px rgba(0,0,0,.05);
+  --sh-device:0 40px 100px rgba(0,0,0,.22),0 8px 30px rgba(0,0,0,.12);
+  --sh-glow:0 0 40px rgba(56,225,255,.18);
+
+  /* ===== Typography ===== */
+  --font-sans:-apple-system,BlinkMacSystemFont,"SF Pro JP","SF Pro Text","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",system-ui,sans-serif;
+  --font-serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+  --font-num:-apple-system,"SF Pro Display","Helvetica Neue",var(--font-sans);
+  --fs-display:clamp(48px,8vw,104px); --fs-h1:clamp(36px,5.5vw,68px);
+  --fs-h2:clamp(28px,4vw,46px); --fs-h3:clamp(20px,2.4vw,28px);
+  --fs-lead:clamp(18px,2.2vw,24px); --fs-body:17px; --fs-sm:15px; --fs-cap:13px;
+  --fs-mega:clamp(64px,12vw,160px);
+  --lh-tight:1.06; --lh-snug:1.22; --lh-body:1.72;
+  --tracking-tight:-0.02em; --tracking-mega:-0.03em;
+  --w-light:300; --w-reg:400; --w-med:500; --w-semi:600; --w-bold:700;
+
+  /* ===== Layout ===== */
+  --maxw:1120px; --maxw-narrow:760px; --gutter:24px;
+  --ease:cubic-bezier(.22,.61,.36,1); --ease-out:cubic-bezier(.16,1,.3,1); --dur:.7s;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font-family:var(--font-sans);font-size:var(--fs-body);line-height:var(--lh-body);
+  font-weight:var(--w-reg);letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+img,svg{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+/* Layout */
+.container{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter)}
+.container--narrow{max-width:var(--maxw-narrow)}
+section{padding-block:var(--s8)}
+@media(max-width:640px){section{padding-block:var(--s7)}}
+
+/* Typography scale */
+.kicker{font-size:var(--fs-cap);font-weight:var(--w-semi);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:var(--fs-h1);line-height:var(--lh-tight);letter-spacing:var(--tracking-tight);font-weight:var(--w-semi);margin:0}
+h2{font-size:var(--fs-h2);line-height:var(--lh-snug);letter-spacing:var(--tracking-tight);font-weight:var(--w-semi);margin:0}
+h3{font-size:var(--fs-h3);line-height:1.3;letter-spacing:var(--tracking-tight);font-weight:var(--w-semi);margin:0}
+.display{font-size:var(--fs-display);line-height:var(--lh-tight);letter-spacing:var(--tracking-mega);font-weight:var(--w-bold);margin:0}
+.lead{font-size:var(--fs-lead);line-height:1.5;color:var(--muted);font-weight:var(--w-reg)}
+.num{font-family:var(--font-num);font-variant-numeric:tabular-nums;letter-spacing:var(--tracking-mega);font-weight:var(--w-bold)}
+p{margin:0 0 1em}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:var(--r-pill);
+  font-size:var(--fs-body);font-weight:var(--w-semi);letter-spacing:.01em;cursor:pointer;border:1px solid transparent;
+  transition:transform .25s var(--ease),background .25s var(--ease),box-shadow .25s var(--ease),color .25s var(--ease)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:var(--sh-2)}
+.btn-primary:hover{background:var(--accent-press);box-shadow:var(--sh-3)}
+.btn-ghost{background:transparent;color:var(--fg);border-color:var(--line-strong)}
+.btn-ghost:hover{border-color:var(--fg);background:rgba(0,0,0,.02)}
+.btn-lg{padding:17px 34px;font-size:var(--fs-lead)}
+
+/* Reveal on scroll — initial state */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
+.reveal.is-in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.08s}
+.reveal[data-d="2"]{transition-delay:.16s}
+.reveal[data-d="3"]{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+
+/* ===== Nav ===== */
+.nav{position:fixed;inset:0 0 auto 0;z-index:100;height:52px;display:flex;align-items:center;
+  backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+  background:rgba(251,251,253,.72);border-bottom:1px solid transparent;transition:border-color .3s var(--ease),background .3s var(--ease)}
+.nav.is-scrolled{border-bottom-color:var(--line);background:rgba(251,251,253,.85)}
+.nav__in{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter);display:flex;align-items:center;justify-content:space-between;gap:var(--s3)}
+.nav__brand{font-weight:var(--w-bold);letter-spacing:var(--tracking-tight);font-size:19px;display:flex;align-items:center;gap:8px}
+.nav__brand .dot{width:20px;height:20px;border-radius:6px;background:var(--flame-grad);display:inline-grid;place-items:center;font-size:12px}
+.nav__links{display:flex;gap:var(--s3);align-items:center}
+.nav__links a{font-size:var(--fs-sm);color:var(--fg-soft);font-weight:var(--w-med);transition:color .2s}
+.nav__links a:hover{color:var(--accent)}
+.nav__cta{font-size:var(--fs-sm);font-weight:var(--w-semi);color:#fff;background:var(--accent);padding:7px 16px;border-radius:var(--r-pill)}
+@media(max-width:820px){.nav__links{display:none}}
+main{overflow-x:clip}
+
+/* ===== Footer ===== */
+.footer{background:var(--bg-alt);border-top:1px solid var(--line);padding-block:var(--s6) var(--s5);color:var(--muted);font-size:var(--fs-sm)}
+.footer__in{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter)}
+.footer__top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s4);align-items:flex-start;padding-bottom:var(--s4);border-bottom:1px solid var(--line)}
+.footer__brand{font-weight:var(--w-bold);font-size:20px;color:var(--fg);letter-spacing:var(--tracking-tight)}
+.footer__tag{margin-top:6px;max-width:34em}
+.footer__cols{display:flex;gap:var(--s6);flex-wrap:wrap}
+.footer__col h5{margin:0 0 10px;font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:var(--w-semi)}
+.footer__col a{display:block;color:var(--fg-soft);margin-bottom:8px;font-size:var(--fs-sm);transition:color .2s}
+.footer__col a:hover{color:var(--accent)}
+.footer__legal{padding-top:var(--s3);display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s2);font-size:var(--fs-cap);color:var(--muted-2)}
+.footer__disc{max-width:60em;line-height:1.6}
+
+/* ===== Section CSS (per-section, prefixed) ===== */
+.s-hero{position:relative;overflow:hidden;padding-block:var(--s7) var(--s8)}
+.s-hero__aura{position:absolute;top:-14%;right:-8%;width:min(760px,80vw);height:min(760px,80vw);
+  background:radial-gradient(circle at 50% 42%,var(--accent-soft) 0%,rgba(251,233,228,.35) 34%,transparent 66%);
+  filter:blur(6px);pointer-events:none;z-index:0}
+
+.s-hero__inner{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;
+  gap:var(--s6);align-items:center;min-height:clamp(560px,74vh,760px)}
+
+/* ---------- Copy ---------- */
+.s-hero__copy{max-width:560px}
+.s-hero__kicker{margin:0 0 var(--s3)}
+.s-hero__headline{font-size:var(--fs-display);margin:0 0 var(--s3);color:var(--fg)}
+.s-hero__sub{margin:0 0 var(--s4);max-width:30em;color:var(--muted);font-size:var(--fs-lead)}
+.s-hero__accentword{color:var(--accent);font-weight:var(--w-semi)}
+
+.s-hero__cta{display:flex;flex-wrap:wrap;gap:var(--s2);margin-bottom:var(--s4)}
+.s-hero__btn-store{padding-inline:30px}
+.s-hero__apple{margin-top:-2px}
+.s-hero__tf-dot{width:8px;height:8px;border-radius:var(--r-pill);background:var(--accent-2);
+  box-shadow:0 0 0 4px var(--accent-2-soft);flex:none}
+
+.s-hero__points{list-style:none;margin:0;padding:var(--s3) 0 0;border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:var(--s2)}
+.s-hero__point{display:flex;align-items:center;gap:var(--s2);font-size:var(--fs-sm);
+  color:var(--fg-soft);font-weight:var(--w-med);line-height:1.4}
+.s-hero__pt-ico{width:34px;height:34px;flex:none;display:grid;place-items:center;font-size:16px;
+  border-radius:var(--r-sm);background:var(--surface-2);box-shadow:var(--sh-1)}
+
+/* ---------- Device stage ---------- */
+.s-hero__stage{position:relative;justify-self:center;display:flex;justify-content:center;width:100%}
+
+.s-hero__phone{position:relative;width:clamp(288px,25vw,332px);aspect-ratio:328/690;
+  background:linear-gradient(160deg,#2A2C33,#141519 60%,#101115);
+  border-radius:var(--r-device);padding:13px;box-shadow:var(--sh-device);
+  z-index:1}
+.s-hero__phone::before{content:"";position:absolute;inset:5px;border-radius:calc(var(--r-device) - 5px);
+  border:1px solid rgba(255,255,255,.06);pointer-events:none}
+.s-hero__island{position:absolute;top:24px;left:50%;transform:translateX(-50%);
+  width:34%;height:26px;background:#000;border-radius:var(--r-pill);z-index:3}
+
+.s-hero__screen{position:relative;height:100%;width:100%;border-radius:32px;overflow:hidden;
+  background:linear-gradient(180deg,#FFFFFF 0%,var(--bg) 30%,var(--bg-alt) 100%);
+  color:var(--fg);padding:14px 15px;display:flex;flex-direction:column;gap:11px}
+
+/* status bar */
+.s-hero__statusbar{display:flex;justify-content:space-between;align-items:center;
+  padding:2px 6px 0;color:var(--fg);font-size:12px}
+.s-hero__time{font-weight:var(--w-semi);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.s-hero__sb-icons{display:flex;align-items:center;gap:5px}
+
+/* app bar */
+.s-hero__appbar{display:flex;align-items:center;gap:7px;padding:2px 4px}
+.s-hero__mark{color:var(--accent);font-size:15px}
+.s-hero__appname{font-weight:var(--w-bold);font-size:15px;letter-spacing:var(--tracking-tight);flex:1}
+.s-hero__gem{font-size:14px}
+
+/* level card */
+.s-hero__levelcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:13px 13px 14px;box-shadow:var(--sh-2)}
+.s-hero__lv-top{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.s-hero__ring{position:relative;width:46px;height:46px;flex:none;border-radius:50%;
+  background:
+    radial-gradient(closest-side,var(--surface) 71%,transparent 72% 100%),
+    conic-gradient(var(--accent) 73%,var(--accent-soft) 0);
+  display:grid;place-items:center}
+.s-hero__ring-num{font-size:17px;color:var(--fg);line-height:1}
+.s-hero__lv-meta{display:flex;flex-direction:column;gap:2px;min-width:0}
+.s-hero__rank{font-weight:var(--w-bold);font-size:16px;letter-spacing:var(--tracking-tight)}
+.s-hero__lv-sub{font-size:11px;color:var(--muted-2)}
+
+.s-hero__xp-labels{display:flex;justify-content:space-between;font-size:11px;
+  color:var(--muted);margin-bottom:6px;font-weight:var(--w-med)}
+.s-hero__xp-labels .num{color:var(--fg-soft);font-size:11px}
+.s-hero__xp-track{height:8px;border-radius:var(--r-pill);background:var(--surface-2);overflow:hidden}
+.s-hero__xp-fill{display:block;height:100%;width:73%;border-radius:var(--r-pill);
+  background:linear-gradient(90deg,var(--accent-press),var(--accent));
+  box-shadow:0 0 14px rgba(224,73,46,.4)}
+
+/* streak */
+.s-hero__streak{display:flex;align-items:center;gap:11px;background:var(--accent-soft);
+  border:1px solid rgba(224,73,46,.16);border-radius:var(--r-md);padding:11px 13px}
+.s-hero__flame{font-size:26px;line-height:1;filter:drop-shadow(0 3px 8px rgba(224,73,46,.45));
+  transform-origin:50% 90%;animation:s-hero-flame 3.4s var(--ease) infinite}
+.s-hero__streak-meta{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
+.s-hero__streak-num{font-size:15px;color:var(--accent-press);font-weight:var(--w-med)}
+.s-hero__streak-num b{font-size:20px;font-weight:var(--w-bold);margin-right:1px}
+.s-hero__streak-sub{font-size:11px;color:#A9583F}
+.s-hero__streak-tag{font-size:10px;font-weight:var(--w-bold);letter-spacing:.06em;color:#fff;
+  background:var(--accent);padding:4px 9px;border-radius:var(--r-pill);white-space:nowrap}
+
+/* fields */
+.s-hero__fieldhead{display:flex;justify-content:space-between;align-items:baseline;
+  padding:2px 2px 0;font-size:13px;font-weight:var(--w-bold);color:var(--fg)}
+.s-hero__fieldhead-all{font-size:11px;font-weight:var(--w-med);color:var(--muted-2)}
+.s-hero__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.s-hero__tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:9px 8px 8px;display:flex;flex-direction:column;gap:5px;box-shadow:var(--sh-1)}
+.s-hero__t-ico{font-size:17px;line-height:1;filter:saturate(.9)}
+.s-hero__t-name{font-size:11px;font-weight:var(--w-semi);color:var(--fg-soft);line-height:1.1}
+.s-hero__t-bar{height:3px;border-radius:var(--r-pill);background:var(--surface-2);overflow:hidden}
+.s-hero__t-bar i{display:block;height:100%;border-radius:var(--r-pill);
+  background:var(--f);opacity:.85}
+
+/* floating badges */
+.s-hero__badge{position:absolute;z-index:2;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-md);padding:11px 15px;box-shadow:var(--sh-3);
+  display:flex;flex-direction:column;gap:1px;line-height:1}
+.s-hero__badge-num{font-size:26px;color:var(--fg)}
+.s-hero__badge-num sup{font-size:14px;color:var(--accent);top:-.5em}
+.s-hero__badge-cap{font-size:10px;color:var(--muted);font-weight:var(--w-med);letter-spacing:.02em}
+.s-hero__badge--free{left:-4%;top:20%}
+.s-hero__badge--q{right:-6%;bottom:16%}
+.s-hero__badge--q .s-hero__badge-num{color:var(--accent-2)}
+
+@keyframes s-hero-flame{
+  0%,100%{transform:scale(1) rotate(0);filter:drop-shadow(0 3px 8px rgba(224,73,46,.45))}
+  45%{transform:scale(1.08) rotate(-2deg);filter:drop-shadow(0 4px 12px rgba(224,73,46,.6))}
+  70%{transform:scale(.97) rotate(1.5deg)}
+}
+
+/* ---------- Responsive ---------- */
+@media(max-width:940px){
+  .s-hero__inner{grid-template-columns:1fr;gap:var(--s5);text-align:center;min-height:0}
+  .s-hero__copy{max-width:620px;margin-inline:auto}
+  .s-hero__sub{margin-inline:auto}
+  .s-hero__cta{justify-content:center}
+  .s-hero__points{align-items:flex-start;width:max-content;max-width:100%;margin-inline:auto}
+  .s-hero__badge--free{left:2%}
+  .s-hero__badge--q{right:0%}
+}
+@media(max-width:560px){
+  .s-hero{padding-block:var(--s5) var(--s7)}
+  .s-hero__headline{font-size:clamp(40px,12vw,60px)}
+  .s-hero__cta{flex-direction:column;align-items:stretch}
+  .s-hero__cta .btn{justify-content:center}
+  .s-hero__phone{width:min(300px,82vw)}
+  .s-hero__badge{padding:9px 12px}
+  .s-hero__badge-num{font-size:21px}
+  .s-hero__badge--free{left:-2%;top:14%}
+  .s-hero__badge--q{right:-2%;bottom:12%}
+}
+@media(prefers-reduced-motion:reduce){
+  .s-hero__flame{animation:none}
+}
+
+.s-marquee{
+  background:var(--bg);
+}
+
+/* ---- header ---- */
+.s-marquee__head{
+  max-width:var(--maxw-narrow);
+  margin-inline:auto;
+  text-align:center;
+}
+.s-marquee__kicker{
+  margin:0 0 var(--s2);
+}
+.s-marquee__headline{
+  margin:0 auto;
+}
+.s-marquee__sub{
+  margin:var(--s3) auto 0;
+  max-width:34ch;
+}
+
+/* ---- number band ---- */
+.s-marquee__band{
+  margin-top:var(--s7);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:var(--s2);
+}
+
+.s-marquee__stat{
+  position:relative;
+  text-align:center;
+  padding:var(--s2) var(--s3);
+}
+/* 余白ではなく“細線ではなく余白”で分ける — ただし読みやすさのため極薄の区切りを一本だけ */
+.s-marquee__stat + .s-marquee__stat::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:12%;
+  bottom:12%;
+  width:1px;
+  background:var(--line);
+}
+
+.s-marquee__figure{
+  font-family:var(--font-num);
+  font-variant-numeric:tabular-nums;
+  font-weight:var(--w-bold);
+  letter-spacing:var(--tracking-mega);
+  line-height:1;
+  color:var(--fg);
+  font-size:clamp(52px,7vw,92px);
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:2px;
+}
+.s-marquee__figure--word{
+  font-family:var(--font-sans);
+  letter-spacing:var(--tracking-tight);
+  font-size:clamp(40px,5.2vw,68px);
+}
+
+/* 唯一の色 = 朱の一滴。「ゼロ」だけをほのかに炎の色に */
+.s-marquee__zero{
+  color:var(--accent);
+}
+
+.s-marquee__unit{
+  font-family:var(--font-sans);
+  font-weight:var(--w-semi);
+  font-size:.28em;
+  letter-spacing:normal;
+  color:var(--muted);
+  margin-left:.12em;
+  align-self:flex-end;
+  padding-bottom:.55em;
+}
+.s-marquee__yen{
+  font-size:.5em;
+  font-weight:var(--w-semi);
+  color:var(--muted-2);
+  align-self:flex-start;
+  padding-top:.14em;
+}
+
+.s-marquee__label{
+  margin-top:var(--s2);
+  font-size:var(--fs-sm);
+  font-weight:var(--w-semi);
+  letter-spacing:.02em;
+  color:var(--fg-soft);
+}
+.s-marquee__note{
+  margin-top:6px;
+  font-size:var(--fs-cap);
+  line-height:1.5;
+  color:var(--muted-2);
+  letter-spacing:.01em;
+}
+
+/* ---- responsive ---- */
+@media(max-width:900px){
+  .s-marquee__band{
+    grid-template-columns:repeat(2,1fr);
+    gap:var(--s4) var(--s2);
+  }
+  /* 2列時は縦線を左端だけ引き直す */
+  .s-marquee__stat + .s-marquee__stat::before{display:none}
+  .s-marquee__stat:nth-child(even)::before{
+    content:"";
+    display:block;
+    position:absolute;
+    left:0;top:10%;bottom:10%;
+    width:1px;background:var(--line);
+  }
+}
+@media(max-width:560px){
+  .s-marquee__band{
+    grid-template-columns:1fr;
+    gap:0;
+    margin-top:var(--s6);
+    max-width:420px;
+    margin-inline:auto;
+  }
+  .s-marquee__stat{
+    padding:var(--s4) var(--s2);
+  }
+  .s-marquee__stat + .s-marquee__stat{
+    border-top:1px solid var(--line);
+  }
+  .s-marquee__stat::before,
+  .s-marquee__stat:nth-child(even)::before{display:none !important}
+}
+
+.s-fields{background:var(--bg)}
+.s-fields__inner{display:flex;flex-direction:column;gap:var(--s6)}
+
+/* ---- Header ---- */
+.s-fields__head{max-width:var(--maxw-narrow);text-align:center;margin-inline:auto;display:flex;flex-direction:column;gap:var(--s2)}
+.s-fields__kicker{align-self:center}
+.s-fields__title{max-width:16ch;margin-inline:auto}
+.s-fields__sub{max-width:52ch;margin-inline:auto}
+
+/* ---- Grid ---- */
+.s-fields__grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:var(--s2);
+}
+
+/* ---- Card ---- */
+.s-fields__card{
+  --fc:var(--accent);
+  position:relative;
+  display:flex;flex-direction:column;gap:var(--s2);
+  padding:var(--s3);
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+  box-shadow:var(--sh-1);
+  overflow:hidden;
+  transition:transform .5s var(--ease-out),
+             box-shadow .5s var(--ease-out),
+             border-color .5s var(--ease-out);
+}
+/* top hairline accent that intensifies on hover */
+.s-fields__card::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:var(--fc);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .55s var(--ease-out);
+}
+.s-fields__card:hover{
+  transform:translateY(-8px);
+  border-color:color-mix(in srgb,var(--fc) 40%,var(--line));
+  box-shadow:0 22px 48px color-mix(in srgb,var(--fc) 18%,transparent),
+             0 6px 16px rgba(0,0,0,.06);
+}
+.s-fields__card:hover::before{transform:scaleX(1)}
+
+/* ---- Card head: chip + count ---- */
+.s-fields__cardtop{display:flex;align-items:center;justify-content:space-between;gap:var(--s2)}
+.s-fields__chip{
+  width:52px;height:52px;flex:none;
+  display:grid;place-items:center;
+  font-size:26px;line-height:1;
+  border-radius:14px;
+  background:color-mix(in srgb,var(--fc) 12%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--fc) 26%,transparent);
+  transition:transform .5s var(--ease-out),background .5s var(--ease-out);
+}
+.s-fields__card:hover .s-fields__chip{
+  transform:scale(1.06) rotate(-3deg);
+  background:color-mix(in srgb,var(--fc) 18%,var(--surface));
+}
+.s-fields__count{
+  font-family:var(--font-num);font-variant-numeric:tabular-nums;
+  font-size:var(--fs-cap);font-weight:var(--w-semi);letter-spacing:.02em;
+  color:color-mix(in srgb,var(--fc) 72%,var(--muted));
+  padding:5px 10px;border-radius:var(--r-pill);
+  background:color-mix(in srgb,var(--fc) 8%,var(--surface-2));
+  white-space:nowrap;
+}
+
+/* ---- Card body ---- */
+.s-fields__label{
+  font-size:var(--fs-h3);line-height:1.25;
+  letter-spacing:var(--tracking-tight);font-weight:var(--w-semi);
+  color:var(--fg);margin:0;
+}
+.s-fields__desc{
+  font-size:var(--fs-sm);line-height:1.6;color:var(--muted);margin:0;
+}
+
+/* ---- Footer summary ---- */
+.s-fields__foot{
+  display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;
+  gap:var(--s1) var(--s3);
+  text-align:center;padding-top:var(--s2);
+}
+.s-fields__foot-stat{display:inline-flex;align-items:baseline;gap:10px}
+.s-fields__foot-num{
+  font-family:var(--font-num);font-variant-numeric:tabular-nums;
+  font-size:clamp(30px,4vw,44px);font-weight:var(--w-bold);
+  letter-spacing:var(--tracking-mega);color:var(--fg);line-height:1;
+}
+.s-fields__foot-lab{font-size:var(--fs-sm);color:var(--muted);font-weight:var(--w-med)}
+.s-fields__foot-div{width:1px;height:26px;background:var(--line-strong);align-self:center}
+
+/* ---- Responsive ---- */
+@media(max-width:980px){
+  .s-fields__grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:720px){
+  .s-fields__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s2)}
+}
+@media(max-width:520px){
+  .s-fields__grid{grid-template-columns:1fr}
+  .s-fields__card{padding:var(--s3) var(--s3)}
+  .s-fields__foot-div{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .s-fields__card,.s-fields__card::before,.s-fields__chip{transition:none}
+  .s-fields__card:hover{transform:none}
+}
+
+.s-game{
+  position:relative;
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--dark-bg-2), var(--dark-bg) 60%),
+    var(--dark-bg);
+  color:var(--dark-fg);
+  overflow:hidden;
+}
+.s-game__bg{position:absolute;inset:0;pointer-events:none;z-index:0}
+.s-game__glow{position:absolute;width:52vw;height:52vw;max-width:760px;max-height:760px;border-radius:50%;filter:blur(120px);opacity:.16}
+.s-game__glow--cyan{top:-12%;left:-8%;background:var(--xp-cyan)}
+.s-game__glow--violet{bottom:-18%;right:-10%;background:var(--xp-violet);opacity:.14}
+.s-game__inner{position:relative;z-index:1}
+
+/* ---- Header ---- */
+.s-game__head{max-width:var(--maxw-narrow);margin-inline:auto;text-align:center;margin-bottom:var(--s6)}
+.s-game__kicker{color:var(--xp-cyan)}
+.s-game__headline{
+  font-size:var(--fs-h1);line-height:var(--lh-tight);letter-spacing:var(--tracking-tight);
+  font-weight:var(--w-bold);margin:var(--s2) 0 var(--s3);
+  color:var(--dark-fg);
+}
+.s-game__sub{font-size:var(--fs-lead);line-height:1.5;color:var(--dark-muted);margin:0}
+
+/* ---- Player hero card ---- */
+.s-game__player{
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,var(--dark-surface-2),var(--dark-surface));
+  border:1px solid var(--dark-line);
+  border-radius:var(--r-xl);
+  padding:var(--s5) var(--s5) var(--s4);
+  box-shadow:var(--sh-3),var(--sh-glow);
+  margin-bottom:var(--s3);
+}
+.s-game__player-top{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap}
+
+/* rank ring */
+.s-game__ring{
+  --p:84%;
+  flex:0 0 auto;width:104px;height:104px;border-radius:50%;
+  background:conic-gradient(var(--xp-cyan) 0 var(--p), var(--dark-line) var(--p) 100%);
+  display:grid;place-items:center;
+  box-shadow:0 0 24px rgba(56,225,255,.28);
+}
+.s-game__ring-inner{
+  width:84px;height:84px;border-radius:50%;
+  background:var(--dark-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;
+}
+.s-game__ring-lv{font-size:11px;letter-spacing:.16em;color:var(--dark-muted);text-transform:uppercase;margin-bottom:3px}
+.s-game__ring-num{font-family:var(--font-num);font-size:38px;font-weight:var(--w-bold);color:var(--dark-fg)}
+
+.s-game__id{flex:1 1 200px;min-width:180px;display:flex;flex-direction:column;gap:6px}
+.s-game__id-label{font-size:var(--fs-cap);letter-spacing:.12em;text-transform:uppercase;color:var(--dark-muted-2)}
+.s-game__id-title{
+  font-size:var(--fs-h3);font-weight:var(--w-semi);color:var(--dark-fg);letter-spacing:var(--tracking-tight);
+  display:inline-flex;align-items:center;gap:8px;
+}
+.s-game__id-mark{color:var(--gold);font-size:.9em}
+.s-game__id-rank{font-size:var(--fs-sm);color:var(--dark-muted)}
+.s-game__id-rank b{color:var(--xp-cyan);font-weight:var(--w-semi)}
+.s-game__id-of{color:var(--dark-muted-2)}
+
+/* streak badge */
+.s-game__streakbadge{
+  flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:var(--s2) var(--s3);border-radius:var(--r-lg);
+  background:rgba(224,73,46,.10);border:1px solid rgba(224,73,46,.30);
+}
+.s-game__flame{position:relative;font-size:26px;line-height:1;filter:drop-shadow(0 0 10px rgba(224,73,46,.6))}
+.s-game__streak-n{font-family:var(--font-num);font-size:26px;font-weight:var(--w-bold);color:#FFB03A}
+.s-game__streak-u{font-size:var(--fs-cap);color:var(--dark-muted)}
+
+/* xp bar */
+.s-game__xp{margin-top:var(--s4)}
+.s-game__xp-top{display:flex;justify-content:space-between;align-items:baseline;font-size:var(--fs-sm);color:var(--dark-muted);margin-bottom:10px}
+.s-game__xp-val{color:var(--dark-fg)}
+.s-game__xp-val b{font-family:var(--font-num);font-weight:var(--w-bold)}
+.s-game__xp-track{height:14px;border-radius:var(--r-pill);background:var(--dark-surface-2);border:1px solid var(--dark-line);overflow:hidden;position:relative}
+.s-game__xp-fill{
+  height:100%;width:84%;border-radius:var(--r-pill);
+  background:var(--xp-grad);
+  box-shadow:0 0 18px rgba(56,225,255,.5);
+  transform-origin:left;
+  animation:s-game-xp 1.6s var(--ease-out) both;
+}
+@keyframes s-game-xp{from{transform:scaleX(.02)}to{transform:scaleX(1)}}
+
+/* rank segments */
+.s-game__ranks{display:flex;gap:6px;margin-top:var(--s3)}
+.s-game__seg{flex:1;height:6px;border-radius:var(--r-pill);background:var(--dark-line)}
+.s-game__seg.is-on{background:linear-gradient(90deg,var(--xp-cyan),var(--xp-violet))}
+.s-game__seg.is-cur{background:var(--xp-cyan);box-shadow:0 0 12px rgba(56,225,255,.7)}
+.s-game__ranks-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:var(--fs-cap);color:var(--dark-muted-2);letter-spacing:.04em}
+
+/* confetti in player card */
+.s-game__confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.s-game__cf{position:absolute;top:-12px;width:8px;height:12px;border-radius:2px;opacity:.9;animation:s-game-fall 3.4s linear infinite}
+.s-game__cf--1{left:12%;background:var(--xp-cyan);animation-delay:0s}
+.s-game__cf--2{left:24%;background:var(--gold);animation-delay:.6s}
+.s-game__cf--3{left:40%;background:var(--xp-violet);animation-delay:1.2s}
+.s-game__cf--4{left:58%;background:var(--accent);animation-delay:.3s}
+.s-game__cf--5{left:70%;background:var(--xp-cyan);animation-delay:1.6s}
+.s-game__cf--6{left:82%;background:var(--gold);animation-delay:.9s}
+.s-game__cf--7{left:92%;background:var(--xp-violet);animation-delay:2.1s}
+@keyframes s-game-fall{
+  0%{transform:translateY(-16px) rotate(0);opacity:0}
+  12%{opacity:.9}
+  100%{transform:translateY(240px) rotate(360deg);opacity:0}
+}
+
+/* ---- Bento grid ---- */
+.s-game__grid{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--s3)}
+.s-game__card{
+  background:var(--dark-surface);
+  border:1px solid var(--dark-line);
+  border-radius:var(--r-lg);
+  padding:var(--s4);
+  position:relative;overflow:hidden;
+}
+.s-game__card--streak{grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between;gap:var(--s3)}
+.s-game__card--badges{grid-column:span 4}
+.s-game__card--mastery{grid-column:span 3}
+.s-game__card--league{grid-column:span 3}
+.s-game__card--combo{grid-column:span 2;display:flex;flex-direction:column}
+.s-game__card--sr{grid-column:span 4}
+.s-game__card--celebrate{grid-column:span 6}
+
+.s-game__card-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);margin-bottom:6px}
+.s-game__card-t{font-size:var(--fs-h3);font-weight:var(--w-semi);color:var(--dark-fg);letter-spacing:var(--tracking-tight)}
+.s-game__card-d{font-size:var(--fs-sm);line-height:1.5;color:var(--dark-muted);margin:6px 0 var(--s3)}
+.s-game__card-tag{font-size:var(--fs-cap);color:var(--xp-cyan);border:1px solid rgba(56,225,255,.35);border-radius:var(--r-pill);padding:3px 10px;white-space:nowrap}
+
+/* streak card */
+.s-game__flame-xl{position:relative;font-size:44px;line-height:1;filter:drop-shadow(0 0 16px rgba(224,73,46,.55));animation:s-game-flicker 2.4s ease-in-out infinite}
+@keyframes s-game-flicker{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.06)}}
+.s-game__streak-big{display:flex;align-items:baseline;gap:6px;margin:0}
+.s-game__streak-big .num{font-family:var(--font-num);font-size:52px;font-weight:var(--w-bold);
+  background:var(--flame-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.s-game__streak-big-u{font-size:var(--fs-body);color:var(--dark-muted)}
+
+/* badges card */
+.s-game__badges{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:var(--s3)}
+.s-game__badge{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:22px;
+  background:var(--dark-surface-2);border:1.5px solid var(--dark-line)}
+.s-game__badge i{font-style:normal;line-height:1}
+.s-game__badge--common{border-color:var(--rar-common)}
+.s-game__badge--uncommon{border-color:var(--rar-uncommon);box-shadow:0 0 12px rgba(62,142,110,.25)}
+.s-game__badge--rare{border-color:var(--rar-rare);box-shadow:0 0 12px rgba(59,125,216,.28)}
+.s-game__badge--epic{border-color:var(--rar-epic);box-shadow:0 0 14px rgba(139,92,255,.32)}
+.s-game__badge--mythic{border-color:var(--rar-mythic);box-shadow:0 0 16px rgba(224,73,46,.4)}
+.s-game__rar-legend{display:flex;flex-wrap:wrap;gap:8px}
+.s-game__rl{font-size:var(--fs-cap);letter-spacing:.04em;padding:3px 10px;border-radius:var(--r-pill);background:var(--dark-surface-2)}
+.s-game__rl--common{color:var(--rar-common)}
+.s-game__rl--uncommon{color:var(--rar-uncommon)}
+.s-game__rl--rare{color:var(--rar-rare)}
+.s-game__rl--epic{color:var(--rar-epic)}
+.s-game__rl--mythic{color:var(--rar-mythic)}
+
+/* mastery */
+.s-game__meters{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.s-game__meters li{display:grid;grid-template-columns:64px 1fr 30px;align-items:center;gap:12px}
+.s-game__meter-l{font-size:var(--fs-sm);color:var(--dark-fg)}
+.s-game__meter{height:8px;border-radius:var(--r-pill);background:var(--dark-surface-2);overflow:hidden}
+.s-game__meter b{display:block;height:100%;border-radius:var(--r-pill)}
+.s-game__meter-v{font-family:var(--font-num);font-size:var(--fs-sm);color:var(--dark-muted);text-align:right}
+
+/* league */
+.s-game__tier{font-size:var(--fs-cap);font-weight:var(--w-semi);color:var(--gold);border:1px solid rgba(199,154,58,.4);border-radius:var(--r-pill);padding:3px 12px;background:rgba(199,154,58,.08)}
+.s-game__board{list-style:none;margin:0 0 var(--s3);padding:0;display:flex;flex-direction:column;gap:2px}
+.s-game__board li{display:grid;grid-template-columns:22px 30px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:var(--fs-sm)}
+.s-game__board li.is-you{background:linear-gradient(90deg,rgba(56,225,255,.12),rgba(139,92,255,.10));border:1px solid rgba(56,225,255,.3)}
+.s-game__pos{font-family:var(--font-num);color:var(--dark-muted-2);text-align:center}
+.s-game__medal{font-size:17px;text-align:center}
+.s-game__you{font-size:10px;font-weight:var(--w-bold);letter-spacing:.06em;color:var(--dark-bg);background:var(--xp-cyan);border-radius:6px;padding:2px 0}
+.s-game__pname{color:var(--dark-fg)}
+.s-game__board li.is-you .s-game__pname{font-weight:var(--w-semi)}
+.s-game__pxp{font-family:var(--font-num);color:var(--dark-muted)}
+.s-game__board li.is-you .s-game__pxp{color:var(--xp-cyan)}
+.s-game__tier-ladder{display:flex;align-items:center;gap:6px;font-size:15px;opacity:.85}
+.s-game__tl-line{flex:1;height:2px;background:var(--dark-line);border-radius:2px}
+.s-game__tier-ladder .is-here{filter:drop-shadow(0 0 8px rgba(199,154,58,.7))}
+
+/* combo */
+.s-game__card--combo{align-items:flex-start}
+.s-game__combo{display:flex;align-items:baseline;gap:2px;margin:auto 0 4px}
+.s-game__combo-x{font-family:var(--font-num);font-size:34px;font-weight:var(--w-bold);color:var(--dark-muted)}
+.s-game__combo-n{font-family:var(--font-num);font-size:72px;font-weight:var(--w-bold);line-height:.9;
+  background:var(--xp-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.s-game__combo-bonus{margin:0;font-size:var(--fs-sm);font-weight:var(--w-semi);color:#FFB03A}
+
+/* SR timeline */
+.s-game__sr-abbr{font-family:var(--font-num);font-size:12px;letter-spacing:.12em;color:var(--xp-cyan);border:1px solid rgba(56,225,255,.35);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+.s-game__sr-line{position:relative;display:flex;justify-content:space-between;align-items:flex-start;padding-top:8px;margin-top:var(--s2)}
+.s-game__sr-track{position:absolute;top:14px;left:6%;right:6%;height:2px;background:var(--dark-line);border-radius:2px}
+.s-game__sr-node{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;flex:1}
+.s-game__sr-dot{width:12px;height:12px;border-radius:50%;background:var(--dark-surface-2);border:2px solid var(--dark-line)}
+.s-game__sr-node.is-done .s-game__sr-dot{background:var(--xp-violet);border-color:var(--xp-violet)}
+.s-game__sr-node.is-now .s-game__sr-dot{background:var(--xp-cyan);border-color:var(--xp-cyan);box-shadow:0 0 0 5px rgba(56,225,255,.18)}
+.s-game__sr-lab{font-size:var(--fs-cap);color:var(--dark-muted)}
+.s-game__sr-node.is-now .s-game__sr-lab{color:var(--xp-cyan)}
+
+/* celebrate */
+.s-game__card--celebrate{text-align:center;padding-block:var(--s5)}
+.s-game__celebrate-body{position:relative;z-index:1}
+.s-game__levelup{
+  display:inline-block;font-family:var(--font-num);font-weight:var(--w-bold);
+  font-size:var(--fs-cap);letter-spacing:.22em;
+  color:var(--dark-bg);background:var(--xp-grad);
+  padding:5px 14px;border-radius:var(--r-pill);margin-bottom:var(--s2);
+}
+.s-game__card--celebrate .s-game__card-d{max-width:440px;margin-inline:auto}
+.s-game__fx{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:var(--s3)}
+.s-game__fx span{font-size:var(--fs-sm);color:var(--dark-muted);background:var(--dark-surface-2);border:1px solid var(--dark-line);border-radius:var(--r-pill);padding:7px 16px}
+.s-game__celebrate-burst{position:absolute;inset:0;pointer-events:none}
+.s-game__celebrate-burst span{position:absolute;top:22%;left:50%;width:7px;height:7px;border-radius:2px}
+.s-game__celebrate-burst span:nth-child(1){background:var(--xp-cyan);animation:s-game-burst 2.6s ease-out infinite;--tx:-160px;--ty:-30px}
+.s-game__celebrate-burst span:nth-child(2){background:var(--gold);animation:s-game-burst 2.6s ease-out infinite .2s;--tx:-90px;--ty:-60px}
+.s-game__celebrate-burst span:nth-child(3){background:var(--xp-violet);animation:s-game-burst 2.6s ease-out infinite .4s;--tx:80px;--ty:-58px}
+.s-game__celebrate-burst span:nth-child(4){background:var(--accent);animation:s-game-burst 2.6s ease-out infinite .6s;--tx:150px;--ty:-24px}
+.s-game__celebrate-burst span:nth-child(5){background:var(--gold);animation:s-game-burst 2.6s ease-out infinite .3s;--tx:-40px;--ty:-70px}
+.s-game__celebrate-burst span:nth-child(6){background:var(--xp-cyan);animation:s-game-burst 2.6s ease-out infinite .5s;--tx:40px;--ty:-68px}
+@keyframes s-game-burst{
+  0%{transform:translate(0,0) scale(.4);opacity:0}
+  15%{opacity:1}
+  100%{transform:translate(var(--tx),var(--ty)) scale(1) rotate(200deg);opacity:0}
+}
+
+/* ---- Responsive ---- */
+@media(max-width:900px){
+  .s-game__grid{grid-template-columns:repeat(2,1fr)}
+  .s-game__card--streak,.s-game__card--badges,.s-game__card--mastery,
+  .s-game__card--league,.s-game__card--combo,.s-game__card--sr,.s-game__card--celebrate{grid-column:span 2}
+}
+@media(max-width:600px){
+  .s-game__player{padding:var(--s4) var(--s3) var(--s3)}
+  .s-game__player-top{justify-content:center;text-align:center}
+  .s-game__id{align-items:center}
+  .s-game__grid{grid-template-columns:1fr}
+  .s-game__card--streak,.s-game__card--badges,.s-game__card--mastery,
+  .s-game__card--league,.s-game__card--combo,.s-game__card--sr,.s-game__card--celebrate{grid-column:span 1}
+  .s-game__combo-n{font-size:60px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .s-game__xp-fill,.s-game__flame-xl,.s-game__cf,.s-game__celebrate-burst span{animation:none}
+  .s-game__cf,.s-game__celebrate-burst span{opacity:0}
+  .s-game__xp-fill{transform:none}
+}
+
+.s-learn{position:relative;overflow:hidden}
+.s-learn__head{max-width:740px}
+.s-learn__kicker{margin-bottom:var(--s2)}
+.s-learn__title{margin-bottom:var(--s3)}
+.s-learn__sub{max-width:580px}
+
+/* ===== main asymmetric grid ===== */
+.s-learn__grid{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:var(--s6);align-items:center;margin-top:var(--s6)}
+.s-learn__stage{display:flex;justify-content:center;position:relative}
+.s-learn__right{display:flex;flex-direction:column;gap:var(--s3)}
+
+/* ===== phone device ===== */
+.s-learn__phone{width:300px;max-width:82vw;background:linear-gradient(160deg,#16181f,#0a0b0f);border-radius:var(--r-device);padding:12px;box-shadow:var(--sh-device);position:relative}
+.s-learn__notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:104px;height:24px;background:#0a0b0f;border-radius:0 0 16px 16px;z-index:4}
+.s-learn__screen{position:relative;background:var(--surface);border-radius:33px;overflow:hidden;padding:16px 15px 20px}
+.s-learn__status{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);font-weight:var(--w-semi);margin-bottom:14px;padding:0 4px}
+.s-learn__field{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:var(--w-semi);color:var(--fg-soft);background:var(--surface-2);padding:5px 11px;border-radius:var(--r-pill);margin-bottom:13px}
+.s-learn__fdot{width:8px;height:8px;border-radius:50%;background:var(--field-functional_anatomy)}
+.s-learn__q{font-size:15px;font-weight:var(--w-semi);line-height:1.5;color:var(--fg);letter-spacing:-.01em;margin-bottom:14px}
+.s-learn__opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.s-learn__opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:13.5px;color:var(--fg-soft);background:var(--surface)}
+.s-learn__opt--wrong{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-press);font-weight:var(--w-semi)}
+.s-learn__opt--right{border-color:var(--accent-2);background:var(--accent-2-soft);color:var(--accent-2);font-weight:var(--w-semi)}
+.s-learn__mk{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:var(--w-bold);flex-shrink:0;border:1.5px solid var(--line-strong);color:var(--muted-2)}
+.s-learn__opt--wrong .s-learn__mk{border-color:var(--accent);color:var(--accent)}
+.s-learn__opt--right .s-learn__mk{border-color:var(--accent-2);color:var(--accent-2)}
+.s-learn__exp{background:var(--surface-2);border-radius:12px;border-left:3px solid var(--accent-2);padding:11px 13px;margin-bottom:12px}
+.s-learn__exp-h{font-size:10.5px;font-weight:var(--w-bold);letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2);margin-bottom:5px}
+.s-learn__exp-b{font-size:12.5px;line-height:1.62;color:var(--fg-soft)}
+.s-learn__jump{display:flex;align-items:center;gap:9px;padding:12px 13px;border-radius:12px;background:var(--accent-2);color:#fff;box-shadow:var(--sh-2)}
+.s-learn__jump-ic{font-size:15px}
+.s-learn__jump-t{flex:1;font-size:12.5px;font-weight:var(--w-semi);line-height:1.35}
+.s-learn__jump-ar{font-size:15px;font-weight:var(--w-bold);opacity:.9}
+
+/* ===== figure card ===== */
+.s-learn__figure{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-2);padding:var(--s4) var(--s4) var(--s3)}
+.s-learn__figtop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:var(--s2)}
+.s-learn__figk{font-size:var(--fs-cap);font-weight:var(--w-semi);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2)}
+.s-learn__fignum{color:var(--fg-soft);font-size:var(--fs-sm);font-weight:var(--w-med)}
+.s-learn__fignum .num{font-size:22px;color:var(--fg);margin-right:2px}
+.s-learn__svg{width:100%;height:auto;display:block;margin:var(--s1) auto var(--s2)}
+.s-learn__figcap{display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:var(--s2)}
+.s-learn__figcap strong{font-weight:var(--w-semi);color:var(--fg);font-size:var(--fs-sm);letter-spacing:-.01em}
+.s-learn__figcap span{color:var(--muted);font-size:var(--fs-cap);line-height:1.55}
+
+/* ===== SVG figure styling & signature draw ===== */
+.s-learn__bl{fill:none;stroke:var(--fg-soft);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0}
+.s-learn__pl{stroke:var(--accent-2);stroke-width:1.3}
+.s-learn__mkdot{fill:var(--accent-2)}
+.s-learn__lb{fill:var(--muted);font-size:12.5px;font-family:var(--font-sans);font-weight:var(--w-semi)}
+@keyframes s-learn__draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes s-learn__in{from{opacity:0}to{opacity:1}}
+.s-learn__figure.is-in .s-learn__body>*{animation:s-learn__draw 1.7s var(--ease-out) .35s both}
+.s-learn__figure.is-in .s-learn__planes>*{animation:s-learn__in .9s ease both}
+.s-learn__figure.is-in .s-learn__planes>*:nth-child(1){animation-delay:.15s}
+.s-learn__figure.is-in .s-learn__planes>*:nth-child(2){animation-delay:.3s}
+.s-learn__figure.is-in .s-learn__planes>*:nth-child(3){animation-delay:.45s}
+.s-learn__figure.is-in .s-learn__labels>*{animation:s-learn__in .8s ease both}
+.s-learn__figure.is-in .s-learn__labels>*:nth-child(1){animation-delay:1s}
+.s-learn__figure.is-in .s-learn__labels>*:nth-child(2){animation-delay:1.15s}
+.s-learn__figure.is-in .s-learn__labels>*:nth-child(3){animation-delay:1.3s}
+
+/* ===== spec-list points ===== */
+.s-learn__points{margin-top:var(--s6);display:grid;grid-template-columns:1fr 1fr;gap:var(--s2) var(--s5)}
+.s-learn__point{display:flex;gap:14px;padding-top:var(--s2);border-top:1px solid var(--line)}
+.s-learn__pn{font-family:var(--font-num);font-size:13px;font-weight:var(--w-bold);color:var(--accent-2);letter-spacing:.03em;padding-top:3px;min-width:22px}
+.s-learn__ptext{min-width:0}
+.s-learn__pt{display:block;font-weight:var(--w-semi);color:var(--fg);margin-bottom:3px;letter-spacing:-.01em}
+.s-learn__pd{color:var(--muted);font-size:var(--fs-sm);line-height:1.6}
+
+@media(max-width:900px){
+  .s-learn__grid{grid-template-columns:1fr;gap:var(--s5);margin-top:var(--s5)}
+  .s-learn__stage{order:2}
+  .s-learn__right{order:1}
+}
+@media(max-width:640px){
+  .s-learn__points{grid-template-columns:1fr;gap:0}
+  .s-learn__figure{padding:var(--s3)}
+}
+@media(prefers-reduced-motion:reduce){
+  .s-learn__figure.is-in .s-learn__body>*,
+  .s-learn__figure.is-in .s-learn__planes>*,
+  .s-learn__figure.is-in .s-learn__labels>*{animation:none}
+}
+
+.s-audience{background:var(--bg);position:relative;overflow:hidden}
+.s-audience__inner{display:flex;flex-direction:column;align-items:center}
+
+/* ---- Header ---- */
+.s-audience__head{max-width:var(--maxw-narrow);text-align:center;margin-inline:auto}
+.s-audience__kicker{margin-bottom:var(--s3)}
+.s-audience__title{margin-bottom:var(--s3)}
+.s-audience__sub{color:var(--muted);max-width:34ch;margin-inline:auto}
+
+/* ---- Persona grid ---- */
+.s-audience__grid{
+  width:100%;max-width:var(--maxw);margin-top:var(--s7);
+  display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s3);
+}
+.s-audience__card{
+  position:relative;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:var(--s5) var(--s4);
+  box-shadow:var(--sh-1);
+  transition:transform var(--dur) var(--ease-out),box-shadow var(--dur) var(--ease-out),border-color var(--dur) var(--ease-out);
+  overflow:hidden;
+}
+.s-audience__card::before{
+  content:"";position:absolute;inset:0 auto 0 0;width:3px;
+  background:var(--card-hue,var(--accent-2));
+  opacity:.9;transform:scaleY(0);transform-origin:top;
+  transition:transform var(--dur) var(--ease-out);
+}
+.s-audience__card:hover{transform:translateY(-4px);box-shadow:var(--sh-3);border-color:var(--line-strong)}
+.s-audience__card:hover::before{transform:scaleY(1)}
+
+.s-audience__chip{
+  width:56px;height:56px;border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--card-hue,var(--accent-2)) 12%,var(--surface));
+  color:var(--card-hue,var(--accent-2));
+  margin-bottom:var(--s3);
+}
+.s-audience__chip svg{width:30px;height:30px;display:block}
+
+.s-audience__role{color:var(--fg);margin-bottom:10px;font-size:var(--fs-h3)}
+.s-audience__desc{color:var(--muted);font-size:var(--fs-body);line-height:1.6;margin:0}
+
+/* ---- Trust / safety footnote ---- */
+.s-audience__trust{
+  width:100%;max-width:var(--maxw-narrow);margin-top:var(--s6);
+  border-top:1px solid var(--line);padding-top:var(--s5);
+  display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s3) var(--s5);
+}
+.s-audience__note{display:flex;gap:var(--s2);align-items:flex-start}
+.s-audience__mark{
+  flex:0 0 auto;width:34px;height:34px;border-radius:var(--r-pill);
+  display:flex;align-items:center;justify-content:center;
+  background:var(--accent-2-soft);color:var(--accent-2);
+}
+.s-audience__mark svg{width:18px;height:18px;display:block}
+.s-audience__note-body{min-width:0}
+.s-audience__note-title{
+  display:block;font-size:var(--fs-sm);font-weight:var(--w-semi);
+  color:var(--fg-soft);margin-bottom:4px;letter-spacing:.01em;
+}
+.s-audience__note-text{
+  display:block;font-size:var(--fs-cap);line-height:1.6;color:var(--muted-2);
+}
+
+@media(max-width:820px){
+  .s-audience__grid{grid-template-columns:1fr;gap:var(--s2)}
+  .s-audience__trust{grid-template-columns:1fr;gap:var(--s3);margin-top:var(--s5)}
+  .s-audience__card{padding:var(--s4) var(--s3)}
+}
+
+.s-privacy{position:relative;background:var(--bg);overflow:hidden}
+.s-privacy__inner{display:flex;flex-direction:column;align-items:center;text-align:center}
+
+/* ---- Heading block ---- */
+.s-privacy__head{max-width:var(--maxw-narrow);margin-inline:auto}
+.s-privacy__kicker{margin-bottom:var(--s3)}
+.s-privacy__title{margin-bottom:var(--s3)}
+.s-privacy__sub{margin:0 auto;max-width:44ch}
+
+/* ---- Stage: device + points ---- */
+.s-privacy__stage{
+  width:100%;max-width:var(--maxw);margin-top:var(--s7);
+  display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr);
+  gap:var(--s7);align-items:center;text-align:left;
+}
+
+/* ---- Device ---- */
+.s-privacy__device-wrap{position:relative;display:flex;justify-content:center}
+.s-privacy__aura{
+  position:absolute;inset:-8% -14%;border-radius:50%;
+  background:radial-gradient(50% 50% at 50% 42%,var(--accent-soft) 0%,rgba(251,233,228,0) 70%);
+  filter:blur(6px);z-index:0;pointer-events:none;
+}
+.s-privacy__device{
+  position:relative;z-index:1;width:270px;max-width:74vw;aspect-ratio:9/18.6;
+  background:linear-gradient(150deg,#1a1c22,#08090d);
+  border-radius:var(--r-device);padding:12px;
+  box-shadow:var(--sh-device);
+}
+.s-privacy__device::after{ /* side button */
+  content:"";position:absolute;right:-2px;top:26%;width:3px;height:52px;
+  border-radius:3px;background:#2a2d35;
+}
+.s-privacy__screen{
+  position:relative;width:100%;height:100%;border-radius:34px;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 0%,#12151c 0%,#0a0b10 60%);
+  display:flex;flex-direction:column;
+  padding:26px 20px 20px;
+}
+.s-privacy__notch{
+  position:absolute;top:11px;left:50%;transform:translateX(-50%);
+  width:78px;height:20px;border-radius:var(--r-pill);background:#000;z-index:3;
+}
+.s-privacy__scr-label{
+  font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dark-muted-2);font-weight:var(--w-semi);text-align:center;
+}
+
+/* boundary + lock */
+.s-privacy__vault{
+  margin-top:20px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:1.5px dashed var(--dark-line);border-radius:var(--r-lg);
+  padding:22px 16px;position:relative;
+}
+.s-privacy__vault-tag{
+  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--dark-surface);color:var(--dark-muted);
+  font-size:11px;letter-spacing:.08em;font-weight:var(--w-semi);
+  padding:2px 12px;border-radius:var(--r-pill);white-space:nowrap;
+}
+.s-privacy__lock{width:82px;height:82px}
+.s-privacy__lock path,.s-privacy__lock rect,.s-privacy__lock circle,.s-privacy__lock line{
+  stroke:var(--accent);fill:none;stroke-width:2.2;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.s-privacy__lock .s-privacy__lock-glow{fill:var(--accent-soft);stroke:none;opacity:.5}
+.s-privacy__vault-txt{
+  margin-top:16px;color:var(--dark-fg);font-size:var(--fs-sm);
+  font-weight:var(--w-semi);text-align:center;letter-spacing:.02em;
+}
+.s-privacy__dots{display:flex;gap:7px;margin-top:14px}
+.s-privacy__dots i{width:8px;height:8px;border-radius:50%;background:var(--xp-cyan);opacity:.85}
+.s-privacy__dots i:nth-child(2){background:var(--xp-violet)}
+.s-privacy__dots i:nth-child(3){background:var(--accent)}
+.s-privacy__dots i:nth-child(4){background:var(--gold)}
+
+/* out = nothing */
+.s-privacy__egress{
+  margin-top:18px;display:flex;align-items:center;justify-content:center;gap:8px;
+  color:var(--dark-muted-2);font-size:12px;letter-spacing:.04em;
+}
+.s-privacy__egress b{color:var(--dark-fg);font-weight:var(--w-semi)}
+
+/* ---- Points ---- */
+.s-privacy__points{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--s1)}
+.s-privacy__pt{
+  display:flex;gap:var(--s3);align-items:flex-start;
+  padding:var(--s3);border-radius:var(--r-md);
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--sh-1);transition:box-shadow .4s var(--ease),transform .4s var(--ease),border-color .4s var(--ease);
+}
+.s-privacy__pt:hover{box-shadow:var(--sh-2);transform:translateY(-2px);border-color:var(--line-strong)}
+.s-privacy__pt-ic{
+  flex:none;width:44px;height:44px;border-radius:var(--r-sm);
+  display:grid;place-items:center;font-size:20px;
+  background:var(--surface-2);
+}
+.s-privacy__pt-body{min-width:0}
+.s-privacy__pt-t{font-size:var(--fs-body);font-weight:var(--w-semi);color:var(--fg);margin:0 0 3px;letter-spacing:.01em}
+.s-privacy__pt-d{font-size:var(--fs-sm);color:var(--muted);margin:0;line-height:1.5}
+
+/* ---- Price coda ---- */
+.s-privacy__price{
+  width:100%;max-width:var(--maxw-narrow);margin:var(--s8) auto 0;
+  text-align:center;padding-top:var(--s6);border-top:1px solid var(--line);
+}
+.s-privacy__price-k{
+  font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted-2);font-weight:var(--w-semi);margin-bottom:var(--s2);
+}
+.s-privacy__price-num{
+  font-family:var(--font-num);font-variant-numeric:tabular-nums;
+  font-size:var(--fs-mega);line-height:.9;letter-spacing:var(--tracking-mega);
+  font-weight:var(--w-bold);color:var(--fg);display:inline-block;
+}
+.s-privacy__price-sub{margin-top:var(--s3);color:var(--muted);font-size:var(--fs-lead)}
+
+@media(max-width:860px){
+  .s-privacy__stage{grid-template-columns:1fr;gap:var(--s6);margin-top:var(--s6)}
+  .s-privacy__device-wrap{order:-1}
+  .s-privacy__points{max-width:520px;width:100%;margin-inline:auto}
+}
+@media(max-width:640px){
+  .s-privacy__pt{padding:var(--s2);gap:var(--s2)}
+  .s-privacy__pt-ic{width:40px;height:40px;font-size:18px}
+  .s-privacy__price{margin-top:var(--s7);padding-top:var(--s5)}
+}
+
+.s-cta{
+  position:relative;
+  background:var(--dark-bg);
+  color:var(--dark-fg);
+  overflow:hidden;
+  isolation:isolate;
+}
+/* 明→暗の境目を上端で溶かす */
+.s-cta::before{
+  content:"";
+  position:absolute;inset:0 0 auto 0;height:220px;
+  background:linear-gradient(180deg,var(--bg),transparent);
+  opacity:.0;pointer-events:none;
+}
+
+/* 一つだけ光る要素＝XPグラデの静かなオーラ */
+.s-cta__aura{
+  position:absolute;z-index:-1;
+  top:-10%;left:50%;transform:translateX(-50%);
+  width:min(760px,120%);aspect-ratio:1/1;
+  background:radial-gradient(circle at 50% 40%,rgba(56,225,255,.16),rgba(139,92,255,.10) 42%,transparent 68%);
+  filter:blur(10px);
+  pointer-events:none;
+}
+.s-cta__grid{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    linear-gradient(to right,rgba(255,255,255,.028) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 42%,#000,transparent 78%);
+          mask-image:radial-gradient(ellipse 70% 60% at 50% 42%,#000,transparent 78%);
+}
+
+.s-cta__inner{
+  position:relative;
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+/* 立ちのぼる炎＝ストリークの継続 */
+.s-cta__flame{
+  display:flex;flex-direction:column;align-items:center;
+  margin-bottom:var(--s4);
+}
+.s-cta__flame-icon{
+  font-size:34px;line-height:1;
+  filter:drop-shadow(0 0 18px rgba(224,73,46,.55));
+}
+.s-cta__flame-line{
+  width:2px;height:var(--s5);margin-top:var(--s1);
+  background:linear-gradient(180deg,rgba(224,73,46,.7),transparent);
+  border-radius:var(--r-pill);
+}
+
+.s-cta__kicker{
+  color:var(--xp-cyan);
+  margin-bottom:var(--s3);
+}
+
+.s-cta__headline{
+  font-size:var(--fs-h1);
+  line-height:var(--lh-tight);
+  letter-spacing:var(--tracking-tight);
+  font-weight:var(--w-bold);
+  color:var(--dark-fg);
+  margin-bottom:var(--s3);
+}
+
+.s-cta__sub{
+  color:var(--dark-muted);
+  max-width:34ch;
+  margin-bottom:var(--s5);
+}
+
+/* ===== Actions ===== */
+.s-cta__actions{
+  display:flex;flex-wrap:wrap;gap:var(--s2);
+  align-items:center;justify-content:center;
+  margin-bottom:var(--s6);
+}
+
+/* App Store 近日公開バッジ */
+.s-cta__badge{
+  display:inline-flex;align-items:center;gap:14px;
+  padding:14px 26px 14px 22px;
+  border-radius:var(--r-md);
+  background:linear-gradient(180deg,#1b1e26,#0f1117);
+  border:1px solid var(--dark-line);
+  box-shadow:var(--sh-3),inset 0 1px 0 rgba(255,255,255,.05);
+  color:var(--dark-fg);
+  transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease);
+}
+.s-cta__badge:hover{
+  transform:translateY(-2px);
+  border-color:rgba(56,225,255,.4);
+  box-shadow:var(--sh-3),var(--sh-glow),inset 0 1px 0 rgba(255,255,255,.06);
+}
+.s-cta__apple{width:26px;height:32px;color:var(--dark-fg);flex:none}
+.s-cta__badge-txt{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15;text-align:left}
+.s-cta__badge-top{
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dark-muted);font-weight:var(--w-med);
+}
+.s-cta__badge-main{
+  font-size:22px;font-weight:var(--w-semi);letter-spacing:.01em;
+  color:var(--dark-fg);
+}
+
+/* TestFlight ghost */
+.s-cta__ghost{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 24px;border-radius:var(--r-pill);
+  border:1px solid var(--dark-line);
+  color:var(--dark-fg);
+  font-size:var(--fs-body);font-weight:var(--w-semi);
+  transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease);
+}
+.s-cta__ghost:hover{
+  border-color:rgba(255,255,255,.32);
+  background:rgba(255,255,255,.03);
+  transform:translateY(-2px);
+}
+.s-cta__tf-dot{
+  width:9px;height:9px;border-radius:var(--r-pill);
+  background:var(--xp-grad);
+  box-shadow:0 0 10px rgba(56,225,255,.7);
+}
+
+/* ===== Points ===== */
+.s-cta__points{
+  list-style:none;margin:0 0 var(--s6);padding:0;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:var(--s2) var(--s5);
+  text-align:left;
+  width:100%;max-width:640px;
+}
+.s-cta__point{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:var(--fs-sm);color:var(--dark-muted);
+  line-height:1.5;
+}
+.s-cta__point strong{color:var(--dark-fg);font-weight:var(--w-semi)}
+.s-cta__check{
+  flex:none;
+  width:22px;height:22px;margin-top:1px;
+  display:grid;place-items:center;
+  border-radius:var(--r-pill);
+  background:rgba(56,225,255,.12);
+  color:var(--xp-cyan);
+  font-size:12px;font-weight:var(--w-bold);
+}
+.s-cta__hl{
+  color:var(--dark-fg);font-weight:var(--w-semi);
+  background:var(--xp-grad);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ===== Brand sign-off ===== */
+.s-cta__brand{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding-top:var(--s4);
+  border-top:1px solid var(--dark-line);
+  width:100%;max-width:640px;
+}
+.s-cta__brand-name{
+  font-size:var(--fs-h3);font-weight:var(--w-bold);
+  letter-spacing:var(--tracking-tight);color:var(--dark-fg);
+}
+.s-cta__brand-tag{
+  font-family:var(--font-serif);
+  font-size:var(--fs-sm);color:var(--dark-muted-2);
+  letter-spacing:.04em;
+}
+
+/* ===== Responsive ===== */
+@media(max-width:640px){
+  .s-cta__brk{display:none}
+  .s-cta__sub{margin-bottom:var(--s4)}
+  .s-cta__actions{
+    flex-direction:column;gap:var(--s2);width:100%;
+    margin-bottom:var(--s5);
+  }
+  .s-cta__badge,.s-cta__ghost{width:100%;justify-content:center}
+  .s-cta__points{
+    grid-template-columns:1fr;
+    gap:var(--s2);
+    max-width:340px;
+    margin-bottom:var(--s5);
+  }
+}
+
+/* ===== Apple-grade QA overrides ===== */
+/* =====================================================================
+   FINAL POLISH — appended overrides (non-destructive)
+   Apple製品ページ級の一貫性・余白リズム・タイポ階層・モーションの上品さ
+   ===================================================================== */
+
+/* ---- 1. Global micro-refinements ---------------------------------- */
+:root{
+  /* コントラストをわずかに底上げ（小さな薄墨テキストの可読性 / WCAG寄せ） */
+  --muted-2:#7C7C82;
+  --dark-muted:#9AA0AA;
+  --dark-muted-2:#7A808A;
+}
+::selection{background:var(--accent-soft);color:var(--accent-press)}
+a,button,.btn{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+/* 暗部セクションのフォーカスリングは視認優先で明色に */
+.s-game :focus-visible,.s-cta :focus-visible,.s-privacy__device :focus-visible{
+  outline-color:var(--xp-cyan);
+}
+
+/* 行分割の上品さ：見出しは均等・本文は孤立行を避ける */
+h1,h2,.display,
+.s-hero__headline,.s-marquee__headline,.s-fields__title,.s-game__headline,
+.s-learn__title,.s-audience__title,.s-privacy__title,.s-cta__headline{
+  text-wrap:balance;
+}
+.lead,.s-hero__sub,.s-game__sub,.s-cta__sub,.s-privacy__sub,
+.s-fields__desc,.s-audience__desc,.s-game__card-d,.s-learn__pd,.s-privacy__pt-d{
+  text-wrap:pretty;
+}
+
+/* kicker のトラッキングと色を全面統一（暗部は各セクション既定色を尊重） */
+.kicker{letter-spacing:.15em}
+
+/* アンカー着地時に上端でピタッと止まらない余白 */
+section[id]{scroll-margin-top:24px}
+
+/* ---- 2. Buttons：Appleの“持ち上がる”手触り ---------------------- */
+.btn{transition:transform .3s var(--ease-out),background .3s var(--ease),
+     box-shadow .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-ghost:hover{transform:translateY(-2px)}
+.btn:active{transform:scale(.97) translateY(0)}
+@media(prefers-reduced-motion:reduce){
+  .btn-primary:hover,.btn-ghost:hover{transform:none}
+}
+
+/* ---- 3. Hero：見出し階層を締め、余白リズムを整える -------------- */
+/* displayが大きすぎてmarqueeの数字と競合するため上限を抑える */
+.s-hero__headline{font-size:clamp(44px,6.2vw,84px);letter-spacing:-0.028em}
+.s-hero__sub{color:var(--fg-soft);opacity:.9}
+/* 浮遊バッジのタイポを少し落ち着かせ、影を繊細に */
+.s-hero__badge{box-shadow:var(--sh-2);backdrop-filter:saturate(1.1)}
+.s-hero__badge-cap{letter-spacing:.01em}
+
+/* ---- 4. セクション間の“素材の切り替わり”を滑らかに --------------- */
+/* 明→明が続く箇所は極薄の面替えでリズムを付ける（Apple流の静かな交互） */
+.s-fields{background:var(--bg-alt)}
+.s-audience{background:var(--bg-alt)}
+/* 明→暗（game / cta）の入りに上端グラデを効かせて溶かす */
+.s-game{background:
+  radial-gradient(120% 80% at 50% -10%,var(--dark-bg-2),var(--dark-bg) 60%),
+  linear-gradient(180deg,rgba(245,245,247,.0),transparent 120px),
+  var(--dark-bg);
+}
+
+/* ---- 5. Fields：17枚グリッドの端数を中央寄せ ---------------------- */
+/* 4列時、17枚目（余り1枚）が左端に孤立しないよう最後を中央へ */
+@media(min-width:981px){
+  .s-fields__card:last-child{grid-column:2 / span 1;justify-self:stretch}
+}
+/* カードのタイトル階層をh3スケールから一段整える（詰まり過ぎ防止） */
+.s-fields__label{font-size:clamp(19px,1.6vw,22px)}
+.s-fields__foot{gap:var(--s1) var(--s4)}
+
+/* ---- 6. Marquee：数字バンドのベースライン統一 -------------------- */
+.s-marquee__figure{align-items:baseline}
+.s-marquee__label{color:var(--fg-soft)}
+/* 区切り線をより繊細に（Appleの“ほぼ余白”の思想へ） */
+.s-marquee__stat + .s-marquee__stat::before,
+.s-marquee__stat:nth-child(even)::before{background:var(--line)}
+
+/* ---- 7. Game：暗部の可読性と余白リズム -------------------------- */
+.s-game__sub{color:var(--dark-muted)}
+.s-game__card-d{color:var(--dark-muted)}
+/* Bentoカードのホバーに、他セクションと揃えた上品な浮きを付与 */
+.s-game__card{transition:transform .5s var(--ease-out),border-color .5s var(--ease-out),box-shadow .5s var(--ease-out)}
+@media(hover:hover){
+  .s-game__card:hover{transform:translateY(-4px);border-color:rgba(56,225,255,.28);
+    box-shadow:0 18px 42px rgba(0,0,0,.35)}
+}
+@media(prefers-reduced-motion:reduce){.s-game__card:hover{transform:none}}
+/* リーグ順位表の“あなた”行のコントラストを一段上げる */
+.s-game__board li.is-you .s-game__pname{color:var(--dark-fg)}
+
+/* ---- 8. Learn：図解カードとスペックリストの整え ------------------ */
+.s-learn__sub{color:var(--fg-soft);opacity:.92}
+.s-learn__pd{color:var(--muted)}
+/* スペック番号の視認性 */
+.s-learn__pn{opacity:.9}
+
+/* ---- 9. Audience / Privacy：面替えに伴うカード地色の担保 --------- */
+/* s-audienceの背景をbg-altにしたため、白カードのコントラストを確保 */
+.s-audience__card{background:var(--surface);border-color:var(--line-strong)}
+.s-audience__desc{color:var(--muted)}
+/* Privacyの端末外“0”表示のコントラスト */
+.s-privacy__egress{color:var(--dark-muted)}
+
+/* ---- 10. CTA：締めの荘厳さ ------------------------------------- */
+.s-cta__sub{color:var(--dark-muted)}
+.s-cta__point{color:var(--dark-muted)}
+/* ブランドサインオフの余韻を少し広げる */
+.s-cta__brand{gap:8px}
+
+/* ---- 11. Reveal：入りの上品さを統一 ---------------------------- */
+.reveal{transform:translateY(22px)}
+.reveal.is-in{transition-timing-function:var(--ease-out)}
+
+/* ---- 12. モバイル総点検（崩れ・詰まりの微調整） ----------------- */
+@media(max-width:560px){
+  /* Hero：見出しと本文の間、CTAの余白を最適化 */
+  .s-hero__headline{font-size:clamp(38px,11vw,56px)}
+  .s-hero__sub{font-size:var(--fs-body);line-height:1.6}
+  /* 浮遊バッジがカードに被り過ぎないよう縮小＆内側へ */
+  .s-hero__badge{transform:scale(.92);transform-origin:center}
+  .s-hero__badge--free{left:0;top:12%}
+  .s-hero__badge--q{right:0;bottom:10%}
+  /* Fieldsフッター：数字と単位の折返しを防ぐ */
+  .s-fields__foot-stat{flex-wrap:nowrap}
+  /* Game：プレイヤーカードのIDブロック中央寄せ時の行間 */
+  .s-game__id-title{font-size:var(--fs-h3)}
+}
+@media(max-width:400px){
+  /* 極小幅での横溢れ最終防波堤 */
+  .s-marquee__figure{font-size:clamp(44px,15vw,64px)}
+  .s-privacy__price-num{font-size:clamp(56px,22vw,88px)}
+}
+
+/* ---- 13. モーションの節度：低速回線・省電力配慮 ------------------ */
+@media(prefers-reduced-motion:reduce){
+  .s-hero__badge{transition:none}
+  .s-game__player,.s-cta__flame-icon{filter:none}
+}
+/* ===== 教材図版スライドショー ===== */
+.s-slides{margin:var(--s1) 0 var(--s2)}
+.s-slides__viewport{position:relative;border-radius:var(--r-md,14px);overflow:hidden;background:var(--surface-2);aspect-ratio:4/3}
+.s-slides__track{display:flex;height:100%;transition:transform .55s var(--ease-out)}
+.s-slide{flex:0 0 100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center;background:#fff}
+.s-slide img{width:100%;height:100%;object-fit:contain;display:block}
+.s-slide__tag{position:absolute;top:10px;left:10px;display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:var(--w-semi);color:#fff;background:rgba(17,19,24,.72);
+  backdrop-filter:blur(6px);padding:5px 10px;border-radius:var(--r-pill);letter-spacing:.01em}
+.s-slide__tdot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-slides__nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(255,255,255,.9);backdrop-filter:blur(8px);
+  color:var(--fg);font-size:20px;line-height:1;cursor:pointer;box-shadow:var(--sh-2);
+  display:flex;align-items:center;justify-content:center;transition:opacity .2s,transform .2s;opacity:0}
+.s-slides__viewport:hover .s-slides__nav,.s-slides__nav:focus-visible{opacity:1}
+.s-slides__nav:hover{transform:translateY(-50%) scale(1.08)}
+.s-slides__nav--prev{left:10px}
+.s-slides__nav--next{right:10px}
+.s-slides__dots{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:var(--s2)}
+.s-slides__dot{width:7px;height:7px;border-radius:50%;border:0;padding:0;cursor:pointer;
+  background:var(--line-strong);transition:background .25s,transform .25s}
+.s-slides__dot.on{background:var(--accent-2);transform:scale(1.45)}
+@media(max-width:900px){
+  .s-slides__nav{opacity:1;width:32px;height:32px;font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .s-slides__track{transition:none}
+}
+
+/* ===== ブラウザ版への導線 ===== */
+.s-hero__weblink{font-size:var(--fs-sm);color:var(--muted);margin:calc(var(--s2) * -1) 0 var(--s4)}
+.s-hero__weblink a{color:var(--accent-2);font-weight:var(--w-semi);text-decoration:none;
+  border-bottom:1px solid transparent;transition:border-color .2s}
+.s-hero__weblink a:hover{border-bottom-color:currentColor}
+@media(max-width:900px){.s-hero__weblink{text-align:center}}
+
+/* ===== 準備中（Google Play）: 押せない見た目 ===== */
+.is-soon{opacity:.55;cursor:default;pointer-events:none;user-select:none}
+.is-soon .s-hero__tf-dot,.is-soon .s-cta__tf-dot{background:var(--dark-fg,#9aa3b2);animation:none}
+</style>
 </head>
 <body>
-<div id="app">
-  <!-- Topbar -->
-  <header id="topbar" class="hidden">
-    <div class="tb-left">
-      <span class="tb-streak" id="tbStreak">🔥 0</span>
+<header class="nav" id="nav">
+  <div class="nav__in">
+    <div class="nav__brand"><span class="dot">🔥</span>BodyQuest</div>
+    <nav class="nav__links"><a href="#fields">17分野</a><a href="#game">つづく仕組み</a><a href="#learn">学ぶ体験</a><a href="#privacy">プライバシー</a><a href="#cta">ダウンロード</a></nav>
+    <a class="nav__cta" href="https://apps.apple.com/jp/app/id6787849611">ダウンロード</a>
+  </div>
+</header>
+
+<main>
+<section id="hero" class="s-hero">
+  <div class="s-hero__aura" aria-hidden="true"></div>
+
+  <div class="container s-hero__inner">
+    <div class="s-hero__copy">
+      <p class="kicker s-hero__kicker reveal">BodyQuest — 身体知のRPG</p>
+
+      <h1 class="display s-hero__headline reveal" data-d="1">身体の知を、<br>毎日ひとくち。</h1>
+
+      <p class="lead s-hero__sub reveal" data-d="2">解剖学から東洋医学まで。<b class="s-hero__accentword">17分野・15,000問以上</b>を、RPGのように続けられる学習アプリ。全機能無料、広告ゼロ。</p>
+
+      <div class="s-hero__cta reveal" data-d="2">
+        <a href="https://apps.apple.com/jp/app/id6787849611" class="btn btn-primary btn-lg s-hero__btn-store">
+          <svg class="s-hero__apple" viewBox="0 0 16 20" width="16" height="20" aria-hidden="true"><path fill="currentColor" d="M13.07 15.6c-.24.55-.52 1.06-.85 1.53-.45.64-.82 1.08-1.1 1.32-.44.4-.9.6-1.4.62-.36 0-.79-.1-1.29-.31-.5-.2-.96-.3-1.38-.3-.44 0-.91.1-1.42.3-.51.21-.92.32-1.24.33-.48.02-.96-.19-1.43-.63-.3-.26-.69-.72-1.16-1.38-.5-.7-.92-1.51-1.24-2.44C.5 13.63.29 12.68.29 11.76c0-1.05.23-1.96.68-2.72a4 4 0 0 1 1.42-1.45 3.83 3.83 0 0 1 1.92-.55c.38 0 .88.12 1.5.35.62.23 1.02.35 1.17.35.28 0 .8-.14 1.55-.41.71-.25 1.31-.36 1.8-.32 1.33.11 2.33.63 3 1.57-1.19.72-1.78 1.73-1.77 3.02.01 1.01.38 1.85 1.1 2.51.33.31.69.55 1.1.72-.09.26-.18.5-.29.75ZM10.6.4c0 .78-.29 1.51-.85 2.19-.68.8-1.5 1.27-2.4 1.2a2.4 2.4 0 0 1-.02-.3c0-.75.32-1.56.9-2.22.29-.34.65-.62 1.1-.85.44-.22.86-.35 1.25-.37.01.12.02.24.02.35Z"/></svg>
+          App Storeでダウンロード
+        </a>
+        <span class="btn btn-ghost btn-lg s-hero__btn-tf is-soon" aria-disabled="true">
+          <span class="s-hero__tf-dot" aria-hidden="true"></span>Google Play 準備中
+        </span>
+      </div>
+      <p class="s-hero__weblink reveal" data-d="2">
+        Androidの方・すぐ試したい方は <a href="app/">ブラウザ版で今すぐ →</a>
+      </p>
+
+      <ul class="s-hero__points reveal" data-d="3">
+        <li class="s-hero__point"><span class="s-hero__pt-ico">🔥</span>レベル・XP・ストリークの炎</li>
+        <li class="s-hero__point"><span class="s-hero__pt-ico">📱</span>iPhone最適化 / オフライン動作</li>
+        <li class="s-hero__point"><span class="s-hero__pt-ico">🔒</span>広告ゼロ・追跡なし</li>
+      </ul>
     </div>
-    <div class="tb-center">
-      <div class="tb-xpbar"><div class="tb-xpfill" id="tbXpFill"></div></div>
-      <span class="tb-lv" id="tbLv">Lv.1</span>
+
+    <div class="s-hero__stage reveal" data-d="2">
+      <div class="s-hero__phone" role="img" aria-label="BodyQuestのホーム画面。レベル・XPバー・ストリークの炎・分野グリッドを表示">
+        <span class="s-hero__island" aria-hidden="true"></span>
+        <div class="s-hero__screen">
+
+          <div class="s-hero__statusbar" aria-hidden="true">
+            <span class="s-hero__time">9:41</span>
+            <span class="s-hero__sb-icons">
+              <svg viewBox="0 0 18 12" width="17" height="11"><rect x="0" y="7" width="3" height="5" rx="1" fill="currentColor"/><rect x="5" y="4.5" width="3" height="7.5" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor" opacity=".35"/></svg>
+              <svg viewBox="0 0 24 12" width="23" height="11"><rect x="0.5" y="0.5" width="19" height="11" rx="3" fill="none" stroke="currentColor" stroke-opacity=".5"/><rect x="2" y="2" width="14" height="8" rx="1.5" fill="currentColor"/><rect x="20.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".5"/></svg>
+            </span>
+          </div>
+
+          <div class="s-hero__appbar">
+            <span class="s-hero__mark" aria-hidden="true">◈</span>
+            <span class="s-hero__appname">BodyQuest</span>
+            <span class="s-hero__gem">💠</span>
+          </div>
+
+          <div class="s-hero__levelcard">
+            <div class="s-hero__lv-top">
+              <div class="s-hero__ring" aria-hidden="true">
+                <span class="s-hero__ring-num num">24</span>
+              </div>
+              <div class="s-hero__lv-meta">
+                <span class="s-hero__rank">熟達者</span>
+                <span class="s-hero__lv-sub">Lv.24 ・ グランドマスターまで6</span>
+              </div>
+            </div>
+            <div class="s-hero__xp">
+              <div class="s-hero__xp-labels">
+                <span>XP</span><span class="num">7,320 / 10,000</span>
+              </div>
+              <div class="s-hero__xp-track"><span class="s-hero__xp-fill"></span></div>
+            </div>
+          </div>
+
+          <div class="s-hero__streak">
+            <span class="s-hero__flame" aria-hidden="true">🔥</span>
+            <div class="s-hero__streak-meta">
+              <span class="s-hero__streak-num"><b class="num">42</b>日連続</span>
+              <span class="s-hero__streak-sub">今日の1問で更新</span>
+            </div>
+            <span class="s-hero__streak-tag">継続中</span>
+          </div>
+
+          <div class="s-hero__fieldhead">
+            <span>分野</span><span class="s-hero__fieldhead-all">17分野</span>
+          </div>
+          <div class="s-hero__grid">
+            <div class="s-hero__tile" style="--f:var(--field-anatomy)"><span class="s-hero__t-ico">🦴</span><span class="s-hero__t-name">解剖学</span><span class="s-hero__t-bar"><i style="width:82%"></i></span></div>
+            <div class="s-hero__tile" style="--f:var(--field-physiology)"><span class="s-hero__t-ico">🫀</span><span class="s-hero__t-name">生理学</span><span class="s-hero__t-bar"><i style="width:64%"></i></span></div>
+            <div class="s-hero__tile" style="--f:var(--field-kinesiology)"><span class="s-hero__t-ico">🏃</span><span class="s-hero__t-name">運動学</span><span class="s-hero__t-bar"><i style="width:71%"></i></span></div>
+            <div class="s-hero__tile" style="--f:var(--field-nutrition)"><span class="s-hero__t-ico">🥗</span><span class="s-hero__t-name">栄養学</span><span class="s-hero__t-bar"><i style="width:48%"></i></span></div>
+            <div class="s-hero__tile" style="--f:var(--field-rehab)"><span class="s-hero__t-ico">🩹</span><span class="s-hero__t-name">リハビリ</span><span class="s-hero__t-bar"><i style="width:55%"></i></span></div>
+            <div class="s-hero__tile" style="--f:var(--field-toyo)"><span class="s-hero__t-ico">☯️</span><span class="s-hero__t-name">東洋医学</span><span class="s-hero__t-bar"><i style="width:39%"></i></span></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="s-hero__badge s-hero__badge--free" aria-hidden="true">
+        <span class="s-hero__badge-num num">¥0</span>
+        <span class="s-hero__badge-cap">全機能無料 / 広告なし</span>
+      </div>
+      <div class="s-hero__badge s-hero__badge--q" aria-hidden="true">
+        <span class="s-hero__badge-num num">15,000<sup>+</sup></span>
+        <span class="s-hero__badge-cap">全問 解説つき</span>
+      </div>
     </div>
-    <div class="tb-right">
-      <span class="tb-hearts" id="tbHearts">❤️ 5</span>
+  </div>
+</section>
+
+<section id="marquee" class="s-marquee">
+  <div class="container">
+
+    <header class="s-marquee__head">
+      <p class="kicker s-marquee__kicker reveal">数字は、誇張しない。</p>
+      <h2 class="s-marquee__headline reveal" data-d="1">事実だけが、静かに語る。</h2>
+      <p class="lead s-marquee__sub reveal" data-d="2">検証できる数字だけを、大きな余白に置きました。</p>
+    </header>
+
+    <div class="s-marquee__band reveal" data-d="1">
+
+      <div class="s-marquee__stat">
+        <div class="s-marquee__figure num">17</div>
+        <div class="s-marquee__label">分野</div>
+        <div class="s-marquee__note">解剖学から東洋医学まで</div>
+      </div>
+
+      <div class="s-marquee__stat">
+        <div class="s-marquee__figure num">
+          15,000<span class="s-marquee__unit">問以上</span>
+        </div>
+        <div class="s-marquee__label">全問に解説つき</div>
+        <div class="s-marquee__note">正確には 15,151問</div>
+      </div>
+
+      <div class="s-marquee__stat">
+        <div class="s-marquee__figure num">
+          <span class="s-marquee__yen">¥</span>0
+        </div>
+        <div class="s-marquee__label">全機能無料</div>
+        <div class="s-marquee__note">広告なし・課金は任意の応援だけ</div>
+      </div>
+
+      <div class="s-marquee__stat">
+        <div class="s-marquee__figure s-marquee__figure--word">広告<span class="s-marquee__zero">ゼロ</span></div>
+        <div class="s-marquee__label">広告・追跡</div>
+        <div class="s-marquee__note">広告なし・行動追跡なし</div>
+      </div>
+
     </div>
-  </header>
 
-  <!-- Screen container -->
-  <main id="screen"></main>
+  </div>
+</section>
 
-  <!-- Bottom nav -->
-  <nav id="nav" class="hidden" aria-label="メインナビゲーション">
-    <button data-route="home" class="nav-btn active" aria-label="ホーム"><span aria-hidden="true">🏠</span><label>ホーム</label></button>
-    <button data-route="fields" class="nav-btn" aria-label="分野"><span aria-hidden="true">📚</span><label>分野</label></button>
-    <button data-route="learn" class="nav-btn" aria-label="教材"><span aria-hidden="true">📖</span><label>教材</label></button>
-    <button data-route="review" class="nav-btn" aria-label="復習"><span aria-hidden="true">🔁</span><label>復習</label></button>
-    <button data-route="stats" class="nav-btn" aria-label="記録"><span aria-hidden="true">📊</span><label>記録</label></button>
-  </nav>
-</div>
+<section id="fields" class="s-fields">
+  <div class="container s-fields__inner">
 
-<!-- Content modules (each pushes into window.QUIZ_CONTENT) -->
-<script src="content/index.js?v=20260701a"></script>
-<script src="content/anatomy.js"></script>
-<script src="content/physiology.js"></script>
-<script src="content/functional_anatomy.js"></script>
-<script src="content/nutrition.js"></script>
-<script src="content/biomechanics.js"></script>
-<script src="content/kinesiology.js"></script>
-<script src="content/assessment.js"></script>
-<script src="content/rehab.js"></script>
+    <header class="s-fields__head reveal">
+      <span class="kicker s-fields__kicker">17分野</span>
+      <h2 class="s-fields__title">基礎から臨床、そして東洋まで。</h2>
+      <p class="lead s-fields__sub">各分野およそ970〜980問。分野固有の色で、17のフィールドが並びます。</p>
+    </header>
 
-<!-- Question expansions (+45 each, IDs 201+) -->
-<script src="content/anatomy_ext.js"></script>
-<script src="content/physiology_ext.js"></script>
-<script src="content/functional_anatomy_ext.js"></script>
-<script src="content/nutrition_ext.js"></script>
-<script src="content/biomechanics_ext.js"></script>
-<script src="content/kinesiology_ext.js"></script>
-<script src="content/assessment_ext.js"></script>
-<script src="content/rehab_ext.js"></script>
+    <div class="s-fields__grid">
 
-<!-- Question expansion batches (IDs 301+/451+/601+) -->
-<script src="content/anatomy_b1.js"></script>
-<script src="content/anatomy_b2.js"></script>
-<script src="content/anatomy_b3.js"></script>
-<script src="content/physiology_b1.js"></script>
-<script src="content/physiology_b2.js"></script>
-<script src="content/physiology_b3.js"></script>
-<script src="content/functional_anatomy_b1.js"></script>
-<script src="content/functional_anatomy_b2.js"></script>
-<script src="content/functional_anatomy_b3.js"></script>
-<script src="content/nutrition_b1.js"></script>
-<script src="content/nutrition_b2.js"></script>
-<script src="content/nutrition_b3.js"></script>
-<script src="content/biomechanics_b1.js"></script>
-<script src="content/biomechanics_b2.js"></script>
-<script src="content/biomechanics_b3.js"></script>
-<script src="content/kinesiology_b1.js"></script>
-<script src="content/kinesiology_b2.js"></script>
-<script src="content/kinesiology_b3.js"></script>
-<script src="content/assessment_b1.js"></script>
-<script src="content/assessment_b2.js"></script>
-<script src="content/assessment_b3.js"></script>
-<script src="content/rehab_b1.js"></script>
-<script src="content/rehab_b2.js"></script>
-<script src="content/rehab_b3.js"></script>
+      <article class="s-fields__card reveal" data-d="1" style="--fc:var(--field-anatomy)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🦴</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">解剖学</h3>
+        <p class="s-fields__desc">骨・筋・関節・神経・内臓の名称と位置</p>
+      </article>
 
-<!-- 現場・実務 (practice field) -->
-<script src="content/practice_a.js"></script>
-<script src="content/practice_b.js"></script>
-<script src="content/practice_c.js"></script>
+      <article class="s-fields__card reveal" data-d="1" style="--fc:var(--field-physiology)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🫀</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">生理学</h3>
+        <p class="s-fields__desc">代謝・循環・呼吸・神経・内分泌の働き</p>
+      </article>
 
-<!-- Expansion toward ~980/field (IDs 801+), diverse-lens batches -->
-<script src="content/anatomy_x1.js"></script>
-<script src="content/anatomy_x2.js"></script>
-<script src="content/anatomy_x3.js"></script>
-<script src="content/anatomy_x4.js"></script>
-<script src="content/physiology_x1.js"></script>
-<script src="content/physiology_x2.js"></script>
-<script src="content/physiology_x3.js"></script>
-<script src="content/physiology_x4.js"></script>
-<script src="content/functional_anatomy_x1.js"></script>
-<script src="content/functional_anatomy_x2.js"></script>
-<script src="content/functional_anatomy_x3.js"></script>
-<script src="content/functional_anatomy_x4.js"></script>
-<script src="content/nutrition_x1.js"></script>
-<script src="content/nutrition_x2.js"></script>
-<script src="content/nutrition_x3.js"></script>
-<script src="content/nutrition_x4.js"></script>
-<script src="content/nutrition_x5.js"></script>
-<script src="content/biomechanics_x1.js"></script>
-<script src="content/biomechanics_x2.js"></script>
-<script src="content/biomechanics_x3.js"></script>
-<script src="content/biomechanics_x4.js"></script>
-<script src="content/kinesiology_x1.js"></script>
-<script src="content/kinesiology_x2.js"></script>
-<script src="content/kinesiology_x3.js"></script>
-<script src="content/kinesiology_x4.js"></script>
-<script src="content/assessment_x1.js"></script>
-<script src="content/assessment_x2.js"></script>
-<script src="content/assessment_x3.js"></script>
-<script src="content/assessment_x4.js"></script>
-<script src="content/rehab_x1.js"></script>
-<script src="content/rehab_x2.js"></script>
-<script src="content/rehab_x3.js"></script>
-<script src="content/rehab_x4.js"></script>
-<script src="content/practice_x1.js"></script>
-<script src="content/practice_x2.js"></script>
-<script src="content/practice_x3.js"></script>
-<script src="content/practice_x4.js"></script>
-<script src="content/practice_x5.js"></script>
-<script src="content/practice_x6.js"></script>
+      <article class="s-fields__card reveal" data-d="2" style="--fc:var(--field-functional_anatomy)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">💪</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">機能解剖学</h3>
+        <p class="s-fields__desc">筋の起始停止・作用・運動連鎖</p>
+      </article>
 
-<!-- New fields: 東洋医学/エクササイズ技術/疼痛科学/スポーツ心理 -->
-<script src="content/toyo_a.js"></script>
-<script src="content/toyo_b.js"></script>
-<script src="content/toyo_c.js"></script>
-<script src="content/exercise_a.js"></script>
-<script src="content/exercise_b.js"></script>
-<script src="content/exercise_c.js"></script>
-<script src="content/pain_a.js"></script>
-<script src="content/pain_b.js"></script>
-<script src="content/pain_c.js"></script>
-<script src="content/psych_a.js"></script>
-<script src="content/psych_b.js"></script>
-<script src="content/psych_c.js"></script>
+      <article class="s-fields__card reveal" data-d="2" style="--fc:var(--field-nutrition)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🥗</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">栄養学</h3>
+        <p class="s-fields__desc">三大栄養素・ビタミン・水分・食事戦略</p>
+      </article>
 
-<!-- New-field expansion toward ~980 (IDs 801+, diverse-lens batches) -->
-<script src="content/toyo_y1.js"></script>
-<script src="content/toyo_y2.js"></script>
-<script src="content/toyo_y3.js"></script>
-<script src="content/toyo_y4.js"></script>
-<script src="content/toyo_y5.js"></script>
-<script src="content/toyo_y6.js"></script>
-<script src="content/exercise_y1.js"></script>
-<script src="content/exercise_y2.js"></script>
-<script src="content/exercise_y3.js"></script>
-<script src="content/exercise_y4.js"></script>
-<script src="content/exercise_y5.js"></script>
-<script src="content/exercise_y6.js"></script>
-<script src="content/pain_y1.js"></script>
-<script src="content/pain_y2.js"></script>
-<script src="content/pain_y3.js"></script>
-<script src="content/pain_y4.js"></script>
-<script src="content/pain_y5.js"></script>
-<script src="content/pain_y6.js"></script>
-<script src="content/psych_y1.js"></script>
-<script src="content/psych_y2.js"></script>
-<script src="content/psych_y3.js"></script>
-<script src="content/psych_y4.js"></script>
-<script src="content/psych_y5.js"></script>
-<script src="content/psych_y6.js"></script>
+      <article class="s-fields__card reveal" data-d="1" style="--fc:var(--field-biomechanics)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">📐</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">バイオメカニクス</h3>
+        <p class="s-fields__desc">力・モーメント・てこ・動作解析</p>
+      </article>
 
-<!-- New fields: 特別対象・ライフ/救急・応急処置/コンディショニング -->
-<script src="content/special_1.js"></script>
-<script src="content/special_2.js"></script>
-<script src="content/special_3.js"></script>
-<script src="content/special_4.js"></script>
-<script src="content/special_5.js"></script>
-<script src="content/firstaid_1.js"></script>
-<script src="content/firstaid_2.js"></script>
-<script src="content/firstaid_3.js"></script>
-<script src="content/firstaid_4.js"></script>
-<script src="content/firstaid_5.js"></script>
-<script src="content/conditioning_1.js"></script>
-<script src="content/conditioning_2.js"></script>
-<script src="content/conditioning_3.js"></script>
-<script src="content/conditioning_4.js"></script>
-<script src="content/conditioning_5.js"></script>
+      <article class="s-fields__card reveal" data-d="1" style="--fc:var(--field-kinesiology)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🏋️</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">運動学・トレ理論</h3>
+        <p class="s-fields__desc">トレーニング原理・適応・運動学習</p>
+      </article>
 
-<!-- New field: 進化・発生・発達 (evo) -->
-<script src="content/evo_1.js"></script>
-<script src="content/evo_2.js"></script>
-<script src="content/evo_3.js"></script>
-<script src="content/evo_4.js"></script>
-<script src="content/evo_5.js"></script>
-<script src="content/evo_x1.js"></script>
-<script src="content/evo_x2.js"></script>
-<script src="content/evo_x3.js"></script>
-<script src="content/evo_x4.js"></script>
+      <article class="s-fields__card reveal" data-d="2" style="--fc:var(--field-assessment)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🔍</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">評価・触診</h3>
+        <p class="s-fields__desc">整形外科テスト・姿勢評価・触診</p>
+      </article>
 
-<!-- Schematic figures (window.FIGURES / FIGURE_MAP) -->
-<script src="content/figures.js?v=20260629d"></script>
-<!-- References (window.FIELD_REFS) -->
-<script src="content/refs.js"></script>
+      <article class="s-fields__card reveal" data-d="2" style="--fc:var(--field-rehab)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🩹</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">傷害・リハビリ</h3>
+        <p class="s-fields__desc">外傷・障害・回復過程・コンディショニング</p>
+      </article>
 
-<!-- Learn material (each pushes into window.LEARN_CONTENT) -->
-<script src="content/learn/anatomy.js"></script>
-<script src="content/learn/physiology.js"></script>
-<script src="content/learn/functional_anatomy.js"></script>
-<script src="content/learn/nutrition.js"></script>
-<script src="content/learn/biomechanics.js"></script>
-<script src="content/learn/kinesiology.js"></script>
-<script src="content/learn/assessment.js"></script>
-<script src="content/learn/rehab.js"></script>
-<script src="content/learn/practice.js"></script>
-<script src="content/learn/toyo.js"></script>
-<script src="content/learn/exercise.js"></script>
-<script src="content/learn/pain.js"></script>
-<script src="content/learn/psych.js"></script>
-<script src="content/learn/special.js"></script>
-<script src="content/learn/firstaid.js"></script>
-<script src="content/learn/conditioning.js"></script>
-<script src="content/learn/evo.js"></script>
+      <article class="s-fields__card reveal" data-d="1" style="--fc:var(--field-practice)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🤝</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">現場・実務</h3>
+        <p class="s-fields__desc">処方・コミュニケーション・リスク管理・倫理・連携</p>
+      </article>
 
-<!-- Generated images (question -> concept image map; missing files self-hide) -->
-<script src="content/gen_images.js?v=20260701webp"></script>
+      <article class="s-fields__card reveal" data-d="1" style="--fc:var(--field-toyo)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">☯️</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">東洋医学</h3>
+        <p class="s-fields__desc">経絡・経穴・気血・五行・四診・証</p>
+      </article>
 
-<!-- Auth & cloud ranking (Firebase) -->
-<script src="firebase-config.js?v=20260717d"></script>
-<script src="auth.js?v=20260717d"></script>
+      <article class="s-fields__card reveal" data-d="2" style="--fc:var(--field-exercise)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🤸</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">エクササイズ技術</h3>
+        <p class="s-fields__desc">種目のフォーム・キューイング・漸進と退行</p>
+      </article>
 
-<!-- 開発者応援（応援課金 / tip jar） -->
-<script src="support.js?v=20260717s"></script>
+      <article class="s-fields__card reveal" data-d="2" style="--fc:var(--field-pain)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🧠</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">疼痛科学</h3>
+        <p class="s-fields__desc">痛みの神経生理・慢性痛・生物心理社会モデル</p>
+      </article>
 
-<!-- App -->
-<script src="app.js?v=20260717d"></script>
+      <article class="s-fields__card reveal" data-d="1" style="--fc:var(--field-psych)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🧩</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">スポーツ心理</h3>
+        <p class="s-fields__desc">メンタルスキル・動機づけ・目標設定・継続</p>
+      </article>
+
+      <article class="s-fields__card reveal" data-d="1" style="--fc:var(--field-special)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🧓</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">特別対象・ライフ</h3>
+        <p class="s-fields__desc">高齢者・女性・小児・有疾患者への運動</p>
+      </article>
+
+      <article class="s-fields__card reveal" data-d="2" style="--fc:var(--field-firstaid)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🚑</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">救急・応急処置</h3>
+        <p class="s-fields__desc">BLS/CPR/AED・脳震盪・熱中症・EAP</p>
+      </article>
+
+      <article class="s-fields__card reveal" data-d="2" style="--fc:var(--field-conditioning)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🏃</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">コンディショニング</h3>
+        <p class="s-fields__desc">SAQ・プライオ・リカバリー・負荷管理</p>
+      </article>
+
+      <article class="s-fields__card reveal" data-d="3" style="--fc:var(--field-evo)">
+        <div class="s-fields__cardtop"><span class="s-fields__chip">🧬</span><span class="s-fields__count">≈975問</span></div>
+        <h3 class="s-fields__label">進化・発生・発達</h3>
+        <p class="s-fields__desc">比較解剖・進化・発生学・運動発達から見るヒトの体</p>
+      </article>
+
+    </div>
+
+    <div class="s-fields__foot reveal">
+      <span class="s-fields__foot-stat"><span class="s-fields__foot-num num">17</span><span class="s-fields__foot-lab">フィールド</span></span>
+      <span class="s-fields__foot-div" aria-hidden="true"></span>
+      <span class="s-fields__foot-stat"><span class="s-fields__foot-num num">15,000</span><span class="s-fields__foot-lab">問以上を収録</span></span>
+    </div>
+
+  </div>
+</section>
+
+<section id="game" class="s-game">
+  <div class="s-game__bg" aria-hidden="true">
+    <div class="s-game__glow s-game__glow--cyan"></div>
+    <div class="s-game__glow s-game__glow--violet"></div>
+  </div>
+
+  <div class="container s-game__inner">
+
+    <header class="s-game__head reveal">
+      <p class="kicker s-game__kicker">つづく仕組み — 最大の差別化</p>
+      <h2 class="s-game__headline">学びを、RPGにした。</h2>
+      <p class="s-game__sub">見習いからグランドマスターへ。毎日ひとくちが、確かな手応えに変わる設計。</p>
+    </header>
+
+    <!-- ===== Hero player card : XP・レベル・常時ランク ===== -->
+    <div class="s-game__player reveal" data-d="1">
+      <div class="s-game__confetti" aria-hidden="true">
+        <span class="s-game__cf s-game__cf--1"></span>
+        <span class="s-game__cf s-game__cf--2"></span>
+        <span class="s-game__cf s-game__cf--3"></span>
+        <span class="s-game__cf s-game__cf--4"></span>
+        <span class="s-game__cf s-game__cf--5"></span>
+        <span class="s-game__cf s-game__cf--6"></span>
+        <span class="s-game__cf s-game__cf--7"></span>
+      </div>
+
+      <div class="s-game__player-top">
+        <div class="s-game__ring" role="img" aria-label="レベル42、次のレベルまで84パーセント">
+          <div class="s-game__ring-inner">
+            <span class="s-game__ring-lv">Lv</span>
+            <span class="s-game__ring-num num">42</span>
+          </div>
+        </div>
+
+        <div class="s-game__id">
+          <span class="s-game__id-label">装備中の称号</span>
+          <span class="s-game__id-title"><span class="s-game__id-mark">🜂</span>継続の求道者</span>
+          <span class="s-game__id-rank">現在ランク — <b>エキスパート</b> <span class="s-game__id-of">/ 全10段階</span></span>
+        </div>
+
+        <div class="s-game__streakbadge" aria-label="連続学習128日">
+          <span class="s-game__flame">
+            <span class="s-game__flame-core"></span>🔥
+          </span>
+          <span class="s-game__streak-n num">128</span>
+          <span class="s-game__streak-u">日連続</span>
+        </div>
+      </div>
+
+      <div class="s-game__xp">
+        <div class="s-game__xp-top">
+          <span>Lv.42</span>
+          <span class="s-game__xp-val"><b class="num">8,420</b> / 10,000 XP</span>
+          <span>Lv.43</span>
+        </div>
+        <div class="s-game__xp-track">
+          <div class="s-game__xp-fill"></div>
+        </div>
+      </div>
+
+      <div class="s-game__ranks" aria-hidden="true">
+        <span class="s-game__seg is-on"></span>
+        <span class="s-game__seg is-on"></span>
+        <span class="s-game__seg is-on"></span>
+        <span class="s-game__seg is-on"></span>
+        <span class="s-game__seg is-on"></span>
+        <span class="s-game__seg is-on"></span>
+        <span class="s-game__seg is-cur"></span>
+        <span class="s-game__seg"></span>
+        <span class="s-game__seg"></span>
+        <span class="s-game__seg"></span>
+      </div>
+      <div class="s-game__ranks-labels" aria-hidden="true">
+        <span>見習い</span>
+        <span>グランドマスター</span>
+      </div>
+    </div>
+
+    <!-- ===== Bento grid of mechanics ===== -->
+    <div class="s-game__grid">
+
+      <!-- ストリーク -->
+      <article class="s-game__card s-game__card--streak reveal" data-d="1">
+        <div class="s-game__flame-xl" aria-hidden="true">
+          <span class="s-game__flame-glow"></span>🔥
+        </div>
+        <div class="s-game__card-body">
+          <h3 class="s-game__card-t">ストリーク</h3>
+          <p class="s-game__card-d">続けるほど伸びる、連続学習日数の炎。</p>
+          <p class="s-game__streak-big"><span class="num">128</span><span class="s-game__streak-big-u">日</span></p>
+        </div>
+      </article>
+
+      <!-- 称号・バッジ56種 -->
+      <article class="s-game__card s-game__card--badges reveal" data-d="2">
+        <div class="s-game__card-head">
+          <h3 class="s-game__card-t">称号・バッジ 56種</h3>
+          <span class="s-game__card-tag">装備して名乗れる</span>
+        </div>
+        <p class="s-game__card-d">5段階レアリティ — common から mythic まで。</p>
+        <div class="s-game__badges">
+          <span class="s-game__badge s-game__badge--common"><i>🎯</i></span>
+          <span class="s-game__badge s-game__badge--common"><i>📘</i></span>
+          <span class="s-game__badge s-game__badge--uncommon"><i>🩹</i></span>
+          <span class="s-game__badge s-game__badge--uncommon"><i>🧭</i></span>
+          <span class="s-game__badge s-game__badge--rare"><i>🦴</i></span>
+          <span class="s-game__badge s-game__badge--rare"><i>🩻</i></span>
+          <span class="s-game__badge s-game__badge--epic"><i>🧠</i></span>
+          <span class="s-game__badge s-game__badge--epic"><i>⚡</i></span>
+          <span class="s-game__badge s-game__badge--mythic"><i>🐉</i></span>
+          <span class="s-game__badge s-game__badge--mythic"><i>🜂</i></span>
+        </div>
+        <div class="s-game__rar-legend">
+          <span class="s-game__rl s-game__rl--common">common</span>
+          <span class="s-game__rl s-game__rl--uncommon">uncommon</span>
+          <span class="s-game__rl s-game__rl--rare">rare</span>
+          <span class="s-game__rl s-game__rl--epic">epic</span>
+          <span class="s-game__rl s-game__rl--mythic">mythic</span>
+        </div>
+      </article>
+
+      <!-- 分野別マスタリー -->
+      <article class="s-game__card s-game__card--mastery reveal" data-d="1">
+        <h3 class="s-game__card-t">分野別マスタリー</h3>
+        <p class="s-game__card-d">分野ごとの習熟度メーター。</p>
+        <ul class="s-game__meters">
+          <li>
+            <span class="s-game__meter-l">解剖学</span>
+            <span class="s-game__meter"><b style="width:88%;background:var(--field-anatomy)"></b></span>
+            <span class="s-game__meter-v num">88</span>
+          </li>
+          <li>
+            <span class="s-game__meter-l">運動学</span>
+            <span class="s-game__meter"><b style="width:74%;background:var(--field-kinesiology)"></b></span>
+            <span class="s-game__meter-v num">74</span>
+          </li>
+          <li>
+            <span class="s-game__meter-l">生理学</span>
+            <span class="s-game__meter"><b style="width:61%;background:var(--field-physiology)"></b></span>
+            <span class="s-game__meter-v num">61</span>
+          </li>
+          <li>
+            <span class="s-game__meter-l">東洋医学</span>
+            <span class="s-game__meter"><b style="width:42%;background:var(--field-toyo)"></b></span>
+            <span class="s-game__meter-v num">42</span>
+          </li>
+        </ul>
+      </article>
+
+      <!-- 週間リーグ -->
+      <article class="s-game__card s-game__card--league reveal" data-d="2">
+        <div class="s-game__card-head">
+          <h3 class="s-game__card-t">週間リーグ</h3>
+          <span class="s-game__tier">ゴールド</span>
+        </div>
+        <p class="s-game__card-d">ブロンズ〜ダイヤ。週替わりで順位を競う。</p>
+        <ol class="s-game__board">
+          <li><span class="s-game__pos">1</span><span class="s-game__medal">🥇</span><span class="s-game__pname">Rin</span><span class="s-game__pxp num">12,480</span></li>
+          <li><span class="s-game__pos">2</span><span class="s-game__medal">🥈</span><span class="s-game__pname">Kai</span><span class="s-game__pxp num">11,020</span></li>
+          <li><span class="s-game__pos">3</span><span class="s-game__medal">🥉</span><span class="s-game__pname">Sora</span><span class="s-game__pxp num">9,860</span></li>
+          <li class="is-you"><span class="s-game__pos">4</span><span class="s-game__medal s-game__you">YOU</span><span class="s-game__pname">あなた</span><span class="s-game__pxp num">8,420</span></li>
+        </ol>
+        <div class="s-game__tier-ladder" aria-hidden="true">
+          <span>🥉</span><span class="s-game__tl-line"></span><span>🥈</span><span class="s-game__tl-line"></span><span class="is-here">🥇</span><span class="s-game__tl-line"></span><span>💎</span>
+        </div>
+      </article>
+
+      <!-- コンボ -->
+      <article class="s-game__card s-game__card--combo reveal" data-d="1">
+        <h3 class="s-game__card-t">コンボ</h3>
+        <p class="s-game__card-d">連続正解でXPボーナス。</p>
+        <div class="s-game__combo">
+          <span class="s-game__combo-x">×</span>
+          <span class="s-game__combo-n num">12</span>
+        </div>
+        <p class="s-game__combo-bonus">+240 XP ボーナス 🔥</p>
+      </article>
+
+      <!-- 間隔反復復習(SR) -->
+      <article class="s-game__card s-game__card--sr reveal" data-d="2">
+        <div class="s-game__card-head">
+          <h3 class="s-game__card-t">間隔反復復習 <span class="s-game__sr-abbr">SR</span></h3>
+        </div>
+        <p class="s-game__card-d">忘れた頃に自動で復習。記憶が、確かに定着する。</p>
+        <div class="s-game__sr-line">
+          <div class="s-game__sr-track"></div>
+          <div class="s-game__sr-node is-done"><span class="s-game__sr-dot"></span><span class="s-game__sr-lab">今日</span></div>
+          <div class="s-game__sr-node is-done"><span class="s-game__sr-dot"></span><span class="s-game__sr-lab">1日</span></div>
+          <div class="s-game__sr-node is-now"><span class="s-game__sr-dot"></span><span class="s-game__sr-lab">3日</span></div>
+          <div class="s-game__sr-node"><span class="s-game__sr-dot"></span><span class="s-game__sr-lab">7日</span></div>
+          <div class="s-game__sr-node"><span class="s-game__sr-dot"></span><span class="s-game__sr-lab">14日</span></div>
+          <div class="s-game__sr-node"><span class="s-game__sr-dot"></span><span class="s-game__sr-lab">30日</span></div>
+        </div>
+      </article>
+
+      <!-- 紙吹雪+効果音+触覚 -->
+      <article class="s-game__card s-game__card--celebrate reveal" data-d="1">
+        <div class="s-game__celebrate-burst" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="s-game__celebrate-body">
+          <span class="s-game__levelup">LEVEL UP</span>
+          <h3 class="s-game__card-t">紙吹雪＋効果音＋触覚</h3>
+          <p class="s-game__card-d">レベルアップと称号獲得を、一度だけ静かに祝う。</p>
+          <div class="s-game__fx">
+            <span>🎉 紙吹雪</span>
+            <span>🔊 効果音</span>
+            <span>📳 触覚</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="learn" class="s-learn">
+  <div class="container">
+
+    <div class="s-learn__head">
+      <p class="kicker s-learn__kicker reveal">学ぶ体験の質</p>
+      <h2 class="s-learn__title reveal" data-d="1">つまずいた瞬間が、いちばん伸びる。</h2>
+      <p class="lead s-learn__sub reveal" data-d="2">全問に解説。誤答したら、関連する教材の該当箇所へワンタップで跳べます。</p>
+    </div>
+
+    <div class="s-learn__grid">
+
+      <!-- ===== phone: 誤答 → 解説 → 教材ジャンプ ===== -->
+      <div class="s-learn__stage reveal">
+        <div class="s-learn__phone">
+          <div class="s-learn__notch"></div>
+          <div class="s-learn__screen">
+            <div class="s-learn__status"><span>7:08</span><span>●●● &nbsp;100%</span></div>
+
+            <div class="s-learn__field"><span class="s-learn__fdot"></span>機能解剖学</div>
+
+            <p class="s-learn__q">肘関節の屈曲に主として働く筋はどれか。</p>
+
+            <div class="s-learn__opts">
+              <div class="s-learn__opt s-learn__opt--wrong"><span class="s-learn__mk">✕</span>上腕三頭筋</div>
+              <div class="s-learn__opt s-learn__opt--right"><span class="s-learn__mk">✓</span>上腕二頭筋</div>
+              <div class="s-learn__opt"><span class="s-learn__mk">C</span>円回内筋</div>
+              <div class="s-learn__opt"><span class="s-learn__mk">D</span>腕橈骨筋</div>
+            </div>
+
+            <div class="s-learn__exp">
+              <div class="s-learn__exp-h">解説</div>
+              <div class="s-learn__exp-b">上腕二頭筋は肘の屈曲と前腕の回外にはたらく主動筋。上腕三頭筋は肘を伸展させる拮抗筋です。</div>
+            </div>
+
+            <div class="s-learn__jump">
+              <span class="s-learn__jump-ic">📖</span>
+              <span class="s-learn__jump-t">教材へ — 機能解剖学 第2章「肘まわりの筋」</span>
+              <span class="s-learn__jump-ar">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== right: 図解の実演 ===== -->
+      <div class="s-learn__right">
+        <div class="s-learn__figure reveal" data-d="1">
+          <div class="s-learn__figtop">
+            <span class="s-learn__figk">図解 · Illustration</span>
+            <span class="s-learn__fignum"><span class="num">280</span>点以上</span>
+          </div>
+
+          <!-- 教材図版スライドショー: JSが .s-slide を回す -->
+          <div class="s-slides" id="learnSlides" aria-roledescription="カルーセル" aria-label="教材の図解サンプル">
+            <div class="s-slides__viewport">
+              <div class="s-slides__track" id="learnTrack"></div>
+              <button class="s-slides__nav s-slides__nav--prev" id="learnPrev" type="button" aria-label="前の図解">‹</button>
+              <button class="s-slides__nav s-slides__nav--next" id="learnNext" type="button" aria-label="次の図解">›</button>
+            </div>
+            <div class="s-slides__dots" id="learnDots" role="tablist" aria-label="図解を選ぶ"></div>
+          </div>
+
+          <div class="s-learn__figcap">
+            <strong id="learnCapT">運動の3面と軸</strong>
+            <span id="learnCapD">教材と解説の随所に表示される図解。全分野あわせて280点以上を収録。</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== spec list ===== -->
+    <div class="s-learn__points reveal">
+      <div class="s-learn__point">
+        <span class="s-learn__pn">01</span>
+        <span class="s-learn__ptext"><span class="s-learn__pt">全問解説</span><span class="s-learn__pd">なぜその答えかが、必ず読める。</span></span>
+      </div>
+      <div class="s-learn__point">
+        <span class="s-learn__pn">02</span>
+        <span class="s-learn__ptext"><span class="s-learn__pt">教材へワンタップ・ジャンプ</span><span class="s-learn__pd">各分野の章立ての読み物が、全問の要点を網羅。</span></span>
+      </div>
+      <div class="s-learn__point">
+        <span class="s-learn__pn">03</span>
+        <span class="s-learn__ptext"><span class="s-learn__pt">280点以上のオリジナル図解</span><span class="s-learn__pd">運動面・てこ・脊柱・筋収縮・経絡・治癒過程・BLSの流れなど、全17分野に描き下ろし。</span></span>
+      </div>
+      <div class="s-learn__point">
+        <span class="s-learn__pn">04</span>
+        <span class="s-learn__ptext"><span class="s-learn__pt">複数の出題形式</span><span class="s-learn__pd">4択・○×・穴埋め。</span></span>
+      </div>
+      <div class="s-learn__point">
+        <span class="s-learn__pn">05</span>
+        <span class="s-learn__ptext"><span class="s-learn__pt">分野横断のキーワード検索</span><span class="s-learn__pd">知りたい言葉から辿れる。</span></span>
+      </div>
+      <div class="s-learn__point">
+        <span class="s-learn__pn">06</span>
+        <span class="s-learn__ptext"><span class="s-learn__pt">出典明記</span><span class="s-learn__pd">代表的な教科書・ガイドラインを各分野に（捏造なし）。</span></span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="audience" class="s-audience">
+  <div class="container s-audience__inner">
+
+    <header class="s-audience__head">
+      <p class="kicker s-audience__kicker reveal">誰のためのアプリか</p>
+      <h2 class="s-audience__title reveal" data-d="1">身体を仕事にする、あなたへ。</h2>
+      <p class="lead s-audience__sub reveal" data-d="2">現場のプロも、これから資格を取る学生も。同じ知識を、続く形で。</p>
+    </header>
+
+    <div class="s-audience__grid">
+
+      <article class="s-audience__card reveal" style="--card-hue:var(--field-exercise)">
+        <div class="s-audience__chip" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 9v6M6.5 7v10M17.5 7v10M20 9v6M6.5 12h11"/>
+          </svg>
+        </div>
+        <h3 class="s-audience__role">パーソナル／ジムトレーナー</h3>
+        <p class="s-audience__desc">指導の根拠を厚くする</p>
+      </article>
+
+      <article class="s-audience__card reveal" data-d="1" style="--card-hue:var(--field-toyo)">
+        <div class="s-audience__chip" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.5"/>
+            <path d="M12 3.5a4.25 4.25 0 0 0 0 8.5 4.25 4.25 0 0 1 0 8.5"/>
+            <circle cx="12" cy="7.75" r="1"/><circle cx="12" cy="16.25" r="1"/>
+          </svg>
+        </div>
+        <h3 class="s-audience__role">柔道整復師・鍼灸師・あん摩マッサージ指圧師</h3>
+        <p class="s-audience__desc">東西の身体観を横断</p>
+      </article>
+
+      <article class="s-audience__card reveal" data-d="1" style="--card-hue:var(--field-rehab)">
+        <div class="s-audience__chip" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13" cy="4.5" r="1.8"/>
+            <path d="M13 7v5l4 2.5M13 12l-3.5 1.5L6 20M13 10l4 1M9.5 13.5 8 20"/>
+          </svg>
+        </div>
+        <h3 class="s-audience__role">理学療法士</h3>
+        <p class="s-audience__desc">評価から臨床までを毎日ひとくち</p>
+      </article>
+
+      <article class="s-audience__card reveal" data-d="2" style="--card-hue:var(--field-assessment)">
+        <div class="s-audience__chip" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 6.5C10.3 5.3 8 4.8 5.5 5v12c2.5-.2 4.8.3 6.5 1.5 1.7-1.2 4-1.7 6.5-1.5V5C16 4.8 13.7 5.3 12 6.5Z"/>
+            <path d="M12 6.5v12"/>
+          </svg>
+        </div>
+        <h3 class="s-audience__role">学生・資格試験の受験生</h3>
+        <p class="s-audience__desc">出題形式で反復し、定着させる</p>
+      </article>
+
+    </div>
+
+    <div class="s-audience__trust reveal" data-d="1">
+
+      <div class="s-audience__note">
+        <span class="s-audience__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19V6.5C6.5 5 9.5 5 12 6.5 14.5 5 17.5 5 20 6.5V19c-2.5-1.5-5.5-1.5-8 0-2.5-1.5-5.5-1.5-8 0Z"/>
+            <path d="M12 6.5V19"/>
+          </svg>
+        </span>
+        <span class="s-audience__note-body">
+          <span class="s-audience__note-title">学習目的のアプリです</span>
+          <span class="s-audience__note-text">診断・治療を行うものではありません。</span>
+        </span>
+      </div>
+
+      <div class="s-audience__note">
+        <span class="s-audience__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3.5 5 6.3v5c0 4.3 2.9 7.4 7 9.2 4.1-1.8 7-4.9 7-9.2v-5L12 3.5Z"/>
+            <path d="M9.4 12.2l1.9 1.9 3.4-3.9"/>
+          </svg>
+        </span>
+        <span class="s-audience__note-body">
+          <span class="s-audience__note-title">安全側に振った内容設計</span>
+          <span class="s-audience__note-text">疼痛・救急はレッドフラッグで受診勧奨。東洋医学は「治る」と断定しません。</span>
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section id="privacy" class="s-privacy">
+  <div class="container s-privacy__inner">
+
+    <header class="s-privacy__head reveal">
+      <p class="kicker s-privacy__kicker">プライバシーと価格</p>
+      <h2 class="s-privacy__title">あなたの学びは、<br>あなたの端末に。</h2>
+      <p class="lead s-privacy__sub">回答履歴や弱点などの学習データは端末内に保存。ランキングに使うのは表示名・アイコン・スコアだけで、行動追跡や広告は一切ありません。</p>
+    </header>
+
+    <div class="s-privacy__stage">
+
+      <div class="s-privacy__device-wrap reveal" data-d="1">
+        <span class="s-privacy__aura" aria-hidden="true"></span>
+        <div class="s-privacy__device">
+          <div class="s-privacy__screen">
+            <span class="s-privacy__notch" aria-hidden="true"></span>
+            <p class="s-privacy__scr-label">BodyQuest</p>
+
+            <div class="s-privacy__vault">
+              <span class="s-privacy__vault-tag">端末内 · localStorage</span>
+
+              <svg class="s-privacy__lock" viewBox="0 0 64 64" role="img" aria-label="端末内に保存された学習データ">
+                <rect class="s-privacy__lock-glow" x="14" y="30" width="36" height="26" rx="6"></rect>
+                <rect x="14" y="30" width="36" height="26" rx="6"></rect>
+                <path d="M22 30 v-6 a10 10 0 0 1 20 0 v6"></path>
+                <line x1="32" y1="40" x2="32" y2="47"></line>
+                <circle cx="32" cy="40" r="0.6"></circle>
+              </svg>
+
+              <p class="s-privacy__vault-txt">回答履歴・弱点データは<br>この端末の中に</p>
+              <div class="s-privacy__dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            </div>
+
+            <p class="s-privacy__egress" aria-hidden="true">
+              送信は<b>スコアのみ</b> ・ 追跡 <b>0</b> ・ 広告 <b>0</b>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <ul class="s-privacy__points reveal" data-d="2">
+        <li class="s-privacy__pt">
+          <span class="s-privacy__pt-ic" aria-hidden="true">🚫</span>
+          <div class="s-privacy__pt-body">
+            <p class="s-privacy__pt-t">取得は最小限</p>
+            <p class="s-privacy__pt-d">表示名・アイコン・スコアだけ。追跡なし。</p>
+          </div>
+        </li>
+        <li class="s-privacy__pt">
+          <span class="s-privacy__pt-ic" aria-hidden="true">🔒</span>
+          <div class="s-privacy__pt-body">
+            <p class="s-privacy__pt-t">学習の中身は端末内</p>
+            <p class="s-privacy__pt-d">回答履歴・弱点は外に出ない。</p>
+          </div>
+        </li>
+        <li class="s-privacy__pt">
+          <span class="s-privacy__pt-ic" aria-hidden="true">✈️</span>
+          <div class="s-privacy__pt-body">
+            <p class="s-privacy__pt-t">オフライン学習</p>
+            <p class="s-privacy__pt-d">電波がなくても学べる。</p>
+          </div>
+        </li>
+        <li class="s-privacy__pt">
+          <span class="s-privacy__pt-ic" aria-hidden="true">💛</span>
+          <div class="s-privacy__pt-body">
+            <p class="s-privacy__pt-t">全機能無料</p>
+            <p class="s-privacy__pt-d">広告なし。課金は任意の「開発者応援」だけ。</p>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+
+    <div class="s-privacy__price reveal">
+      <p class="s-privacy__price-k">価格</p>
+      <span class="s-privacy__price-num">¥0</span>
+      <p class="s-privacy__price-sub">17分野・約15,000問。全機能無料で、ずっと。応援したい人だけの任意課金はあります。</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="cta" class="s-cta">
+  <div class="s-cta__aura" aria-hidden="true"></div>
+  <div class="s-cta__grid" aria-hidden="true"></div>
+
+  <div class="container container--narrow s-cta__inner">
+
+    <div class="s-cta__flame reveal" aria-hidden="true">
+      <span class="s-cta__flame-icon">🔥</span>
+      <span class="s-cta__flame-line"></span>
+    </div>
+
+    <p class="kicker s-cta__kicker reveal">無料ダウンロード</p>
+
+    <h2 class="s-cta__headline reveal" data-d="1">はじめよう。<br>毎日ひとくちから。</h2>
+
+    <p class="lead s-cta__sub reveal" data-d="2">
+      App Store で配信中。無料でダウンロードできます。<br class="s-cta__brk">Android（Google Play）は現在準備中です。
+    </p>
+
+    <div class="s-cta__actions reveal" data-d="2">
+      <a class="s-cta__badge" href="https://apps.apple.com/jp/app/id6787849611" aria-label="App Storeでダウンロード">
+        <svg class="s-cta__apple" viewBox="0 0 16 20" aria-hidden="true">
+          <path fill="currentColor" d="M13.07 15.6c-.24.55-.52 1.06-.85 1.53-.45.64-.82 1.08-1.1 1.32-.44.4-.9.6-1.4.62-.36 0-.79-.1-1.29-.31-.5-.2-.96-.3-1.38-.3-.44 0-.91.1-1.42.3-.51.21-.92.32-1.24.33-.48.02-.96-.19-1.43-.63-.3-.26-.69-.72-1.16-1.38-.5-.7-.92-1.51-1.24-2.44C.5 13.63.29 12.68.29 11.76c0-1.05.23-1.96.68-2.72a4 4 0 0 1 1.42-1.45 3.83 3.83 0 0 1 1.92-.55c.38 0 .88.12 1.5.35.62.23.02.35 1.17.35.28 0 .8-.14 1.55-.41.71-.25 1.31-.36 1.8-.32 1.33.11 2.33.63 3 1.57-1.19.72-1.78 1.73-1.77 3.02.01 1.01.38 1.85 1.1 2.51.33.31.69.55 1.1.72-.09.26-.18.5-.29.75ZM10.6.4c0 .78-.29 1.51-.85 2.19-.68.8-1.5 1.27-2.4 1.2a2.4 2.4 0 0 1-.02-.3c0-.75.32-1.56.9-2.22.29-.34.65-.62 1.1-.85.44-.22.86-.35 1.25-.37.01.12.02.24.02.35Z"/>
+        </svg>
+        <span class="s-cta__badge-txt">
+          <span class="s-cta__badge-top">無料 · Download on the</span>
+          <span class="s-cta__badge-main">App Store</span>
+        </span>
+      </a>
+
+      <span class="s-cta__ghost is-soon" aria-disabled="true">
+        <span class="s-cta__tf-dot" aria-hidden="true"></span>
+        Google Play — 準備中
+      </span>
+    </div>
+
+    <ul class="s-cta__points reveal" data-d="3">
+      <li class="s-cta__point">
+        <span class="s-cta__check" aria-hidden="true">✓</span>
+        <span>App Store で<strong>配信中</strong>・無料ダウンロード</span>
+      </li>
+      <li class="s-cta__point">
+        <span class="s-cta__check" aria-hidden="true">✓</span>
+        <span>Google Play（Android）は<strong>準備中</strong></span>
+      </li>
+      <li class="s-cta__point">
+        <span class="s-cta__check" aria-hidden="true">✓</span>
+        <span><strong>全機能無料</strong>・広告なし・オフライン学習OK</span>
+      </li>
+      <li class="s-cta__point">
+        <span class="s-cta__check" aria-hidden="true">✓</span>
+        <span><span class="s-cta__hl">17分野・15,000問以上</span>が、あなたを待っています</span>
+      </li>
+    </ul>
+
+    <div class="s-cta__brand reveal" data-d="3">
+      <span class="s-cta__brand-name">BodyQuest</span>
+      <span class="s-cta__brand-tag">身体の知を、毎日ひとくち。</span>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="footer__in">
+    <div class="footer__top">
+      <div>
+        <div class="footer__brand">BodyQuest</div>
+        <p class="footer__tag">身体の知を、毎日ひとくち。<br>トレーナー・セラピストのための、ゲーム感覚で学ぶ身体知識アプリ。</p>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <h5>アプリ</h5>
+          <a href="#fields">17分野</a>
+          <a href="#game">つづく仕組み</a>
+          <a href="#learn">学ぶ体験</a>
+          <a href="#cta">ダウンロード</a>
+        </div>
+        <div class="footer__col">
+          <h5>安心</h5>
+          <a href="#privacy">プライバシー</a>
+          <a href="#audience">対象ユーザー</a>
+        </div>
+      </div>
+    </div>
+    <p class="footer__disc" style="margin:var(--s3) 0 0">BodyQuest は学習を目的としたアプリであり、疾病の診断・治療を行うものではありません。健康上の判断は医療専門職にご相談ください。回答履歴などの学習データは端末内に保存され、ランキングには表示名・アイコン・スコアのみが使われます。</p>
+    <div class="footer__legal">
+      <span>© 2026 BodyQuest. All rights reserved.</span>
+      <span>17分野・15,000問以上・全機能無料</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Reveal on scroll
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target);} });
+  }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  // Nav scrolled state
+  var nav = document.getElementById('nav');
+  var onScroll = function(){ if(window.scrollY>12){ nav.classList.add('is-scrolled'); } else { nav.classList.remove('is-scrolled'); } };
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  /* ===== 教材図版スライドショー =====
+     アプリ内で実際に表示している教材図版(app/content/images/)をそのまま見せる。 */
+  var SLIDES = [
+    {f:'functional_anatomy', l:'機能解剖学', c:'#4f8ef0', src:'functional_anatomy/fa_img_019.webp',
+     t:'運動の3面と軸', d:'矢状面・前額面・水平面と、それぞれの軸まわりに起こる運動を一枚で。'},
+    {f:'biomechanics', l:'バイオメカニクス', c:'#f0803c', src:'biomechanics/bio_img_lever_three_classes.webp',
+     t:'てこの3分類と機械的利益', d:'支点・力点・作用点の位置関係から、第1〜3種のてこを整理。'},
+    {f:'anatomy', l:'解剖学', c:'#e2555a', src:'anatomy/ana_img_spine.webp',
+     t:'脊柱の構造', d:'頸椎から尾骨まで。彎曲と各部位の特徴を立体的に。'},
+    {f:'physiology', l:'生理学', c:'#4caf72', src:'physiology/physiology_img_muscle_contraction.webp',
+     t:'筋収縮のしくみ', d:'アクチンとミオシンの滑走説を、分子レベルから。'},
+    {f:'toyo', l:'東洋医学', c:'#b06ef0', src:'toyo/toyo_img_meridians.webp',
+     t:'経絡の全体像', d:'経脈・絡脈・経穴の関係と、十二正経・奇経八脈。'},
+    {f:'assessment', l:'評価・テスト', c:'#3fb6c4', src:'assessment/asm_shoulder_rotatorcuff_function.webp',
+     t:'回旋筋腱板の機能テスト', d:'各筋の作用と、それを引き出す徒手テストの対応。'},
+    {f:'rehab', l:'傷害・リハビリ', c:'#e28a55', src:'rehab/rehab_img_healing_phases.webp',
+     t:'組織の治癒過程', d:'炎症期・増殖期・成熟期。各期にできることが変わる。'},
+    {f:'pain', l:'疼痛科学', c:'#ff5d8f', src:'pain/pain_img_neurophysiology.webp',
+     t:'痛みの神経生理', d:'侵害受容から脳での認知まで、痛みが生まれる道すじ。'},
+    {f:'nutrition', l:'栄養学', c:'#ffb300', src:'nutrition/nutrition_img_energy_metabolism.webp',
+     t:'エネルギー代謝', d:'糖・脂質・タンパク質がATPになるまでの全体像。'},
+    {f:'kinesiology', l:'運動学・トレ理論', c:'#7c6ef0', src:'kinesiology/kinesiology_img_supercompensation.webp',
+     t:'超回復と適応', d:'負荷・回復・適応のサイクルと、頻度設計の考え方。'},
+    {f:'firstaid', l:'救急・応急処置', c:'#d94f4f', src:'firstaid/firstaid_img_bls_flow.webp',
+     t:'一次救命処置(BLS)の流れ', d:'安全確認からCPR・AEDまで。現場で迷わない手順。'},
+    {f:'evo', l:'進化・発生・発達', c:'#5aa9a0', src:'evo/evo_img_bipedalism.webp',
+     t:'直立二足歩行への適応', d:'ヒトの骨格が「立って歩く」ために何を変えたのか。'}
+  ];
+  var track = document.getElementById('learnTrack');
+  if(track){
+    var dotsBox = document.getElementById('learnDots'),
+        capT = document.getElementById('learnCapT'), capD = document.getElementById('learnCapD'),
+        viewport = document.querySelector('.s-slides__viewport'),
+        i = 0, timer = null, DUR = 4200;
+
+    SLIDES.forEach(function(s, n){
+      var slide = document.createElement('div');
+      slide.className = 's-slide';
+      slide.setAttribute('role','group');
+      slide.setAttribute('aria-label', (n+1)+' / '+SLIDES.length+' — '+s.t);
+      slide.innerHTML =
+        '<img src="app/content/images/'+s.src+'" alt="'+s.t+' — '+s.l+'の教材図解" '+
+          (n===0?'loading="eager"':'loading="lazy"')+' decoding="async">'+
+        '<span class="s-slide__tag" style="color:'+s.c+'">'+
+          '<i class="s-slide__tdot"></i><span style="color:#fff">'+s.l+'</span></span>';
+      track.appendChild(slide);
+
+      var dot = document.createElement('button');
+      dot.className = 's-slides__dot'+(n===0?' on':'');
+      dot.type = 'button';
+      dot.setAttribute('role','tab');
+      dot.setAttribute('aria-label', s.l+' — '+s.t);
+      dot.addEventListener('click', function(){ go(n); rest(); });
+      dotsBox.appendChild(dot);
+    });
+
+    var dots = dotsBox.querySelectorAll('.s-slides__dot');
+    function go(n){
+      i = (n + SLIDES.length) % SLIDES.length;
+      track.style.transform = 'translateX(-'+(i*100)+'%)';
+      dots.forEach(function(d, k){ d.classList.toggle('on', k===i); d.setAttribute('aria-selected', k===i); });
+      capT.textContent = SLIDES[i].t;
+      capD.textContent = SLIDES[i].d;
+    }
+    function play(){ if(!timer) timer = setInterval(function(){ go(i+1); }, DUR); }
+    function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+    function rest(){ stop(); play(); }
+
+    document.getElementById('learnPrev').addEventListener('click', function(){ go(i-1); rest(); });
+    document.getElementById('learnNext').addEventListener('click', function(){ go(i+1); rest(); });
+    viewport.addEventListener('mouseenter', stop);
+    viewport.addEventListener('mouseleave', play);
+
+    // スワイプ（モバイル）
+    var x0 = null;
+    viewport.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; stop(); }, {passive:true});
+    viewport.addEventListener('touchend', function(e){
+      if(x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if(Math.abs(dx) > 40) go(dx < 0 ? i+1 : i-1);
+      x0 = null; play();
+    }, {passive:true});
+
+    // 画面内にある間だけ自動再生（見えていないところで回さない）
+    var vio = new IntersectionObserver(function(es){
+      es.forEach(function(e){ e.isIntersecting ? play() : stop(); });
+    }, {threshold:0.25});
+    vio.observe(viewport);
+
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce) stop();
+  }
+})();
+</script>
 </body>
 </html>
