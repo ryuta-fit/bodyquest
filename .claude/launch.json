@@ -22,7 +22,7 @@
     {
       "name": "lp",
       "runtimeExecutable": "bash",
-      "runtimeArgs": ["-c", "exec python3 -m http.server --directory lp \"${PORT:-4180}\""],
+      "runtimeArgs": ["-c", "exec python3 -m http.server \"${PORT:-4180}\""],
       "autoPort": true
     }
   ]

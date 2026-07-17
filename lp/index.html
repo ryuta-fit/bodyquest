@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BodyQuest — 身体の知を、毎日ひとくち。</title>
-<meta name="description" content="トレーナー・セラピストのための、ゲーム感覚で学ぶ身体知識アプリ。17分野・15,000問以上・完全無料。">
+<meta name="description" content="トレーナー・セラピストのための、ゲーム感覚で学ぶ身体知識アプリ。17分野・15,000問以上・図解280点以上、全機能無料。App Storeで配信中。">
 <meta name="theme-color" content="#FBFBFD">
 <meta property="og:title" content="BodyQuest — 身体の知を、毎日ひとくち。">
 <meta property="og:description" content="17分野・15,000問以上を、RPGのように毎日ひとくちずつ。トレーナー・セラピストのための学習アプリ。">
@@ -1409,14 +1409,46 @@ section[id]{scroll-margin-top:24px}
   .s-hero__badge{transition:none}
   .s-game__player,.s-cta__flame-icon{filter:none}
 }
+/* ===== 教材図版スライドショー ===== */
+.s-slides{margin:var(--s1) 0 var(--s2)}
+.s-slides__viewport{position:relative;border-radius:var(--r-md,14px);overflow:hidden;background:var(--surface-2);aspect-ratio:4/3}
+.s-slides__track{display:flex;height:100%;transition:transform .55s var(--ease-out)}
+.s-slide{flex:0 0 100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center;background:#fff}
+.s-slide img{width:100%;height:100%;object-fit:contain;display:block}
+.s-slide__tag{position:absolute;top:10px;left:10px;display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:var(--w-semi);color:#fff;background:rgba(17,19,24,.72);
+  backdrop-filter:blur(6px);padding:5px 10px;border-radius:var(--r-pill);letter-spacing:.01em}
+.s-slide__tdot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-slides__nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(255,255,255,.9);backdrop-filter:blur(8px);
+  color:var(--fg);font-size:20px;line-height:1;cursor:pointer;box-shadow:var(--sh-2);
+  display:flex;align-items:center;justify-content:center;transition:opacity .2s,transform .2s;opacity:0}
+.s-slides__viewport:hover .s-slides__nav,.s-slides__nav:focus-visible{opacity:1}
+.s-slides__nav:hover{transform:translateY(-50%) scale(1.08)}
+.s-slides__nav--prev{left:10px}
+.s-slides__nav--next{right:10px}
+.s-slides__dots{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:var(--s2)}
+.s-slides__dot{width:7px;height:7px;border-radius:50%;border:0;padding:0;cursor:pointer;
+  background:var(--line-strong);transition:background .25s,transform .25s}
+.s-slides__dot.on{background:var(--accent-2);transform:scale(1.45)}
+@media(max-width:900px){
+  .s-slides__nav{opacity:1;width:32px;height:32px;font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .s-slides__track{transition:none}
+}
+
+/* ===== 準備中（Google Play）: 押せない見た目 ===== */
+.is-soon{opacity:.55;cursor:default;pointer-events:none;user-select:none}
+.is-soon .s-hero__tf-dot,.is-soon .s-cta__tf-dot{background:var(--dark-fg,#9aa3b2);animation:none}
 </style>
 </head>
 <body>
 <header class="nav" id="nav">
   <div class="nav__in">
     <div class="nav__brand"><span class="dot">🔥</span>BodyQuest</div>
-    <nav class="nav__links"><a href="#fields">17分野</a><a href="#game">つづく仕組み</a><a href="#learn">学ぶ体験</a><a href="#privacy">プライバシー</a><a href="#cta">近日公開</a></nav>
-    <a class="nav__cta" href="#cta">近日公開</a>
+    <nav class="nav__links"><a href="#fields">17分野</a><a href="#game">つづく仕組み</a><a href="#learn">学ぶ体験</a><a href="#privacy">プライバシー</a><a href="#cta">ダウンロード</a></nav>
+    <a class="nav__cta" href="https://apps.apple.com/jp/app/id6787849611">ダウンロード</a>
   </div>
 </header>
 
@@ -1430,22 +1462,22 @@ section[id]{scroll-margin-top:24px}
 
       <h1 class="display s-hero__headline reveal" data-d="1">身体の知を、<br>毎日ひとくち。</h1>
 
-      <p class="lead s-hero__sub reveal" data-d="2">解剖学から東洋医学まで。<b class="s-hero__accentword">17分野・15,000問以上</b>を、RPGのように続けられる学習アプリ。完全無料、収集ゼロ。</p>
+      <p class="lead s-hero__sub reveal" data-d="2">解剖学から東洋医学まで。<b class="s-hero__accentword">17分野・15,000問以上</b>を、RPGのように続けられる学習アプリ。全機能無料、広告ゼロ。</p>
 
       <div class="s-hero__cta reveal" data-d="2">
-        <a href="#" class="btn btn-primary btn-lg s-hero__btn-store">
-          <svg class="s-hero__apple" viewBox="0 0 20 24" width="18" height="22" aria-hidden="true"><path fill="currentColor" d="M16.5 18.2c-.3.7-.7 1.4-1.2 2-.6.9-1.2 1.5-1.7 1.8-.7.5-1.5.7-2.3.8-.6 0-1.3-.2-2.1-.5-.8-.3-1.6-.5-2.3-.5-.7 0-1.5.2-2.3.5-.9.3-1.5.5-2 .5-.8 0-1.6-.3-2.3-.8-.5-.4-1.1-1-1.8-1.9C1.4 18.4.8 17 .4 15.4-.1 13.7-.3 12 .-.3 10.4c0-1.8.4-3.4 1.2-4.7.6-1 1.4-1.9 2.5-2.5C4.4 2.6 5.6 2.3 6.9 2.3c.6 0 1.4.2 2.4.6.9.3 1.5.5 1.8.5.2 0 .9-.3 2-.7 1.1-.4 2-.5 2.7-.5 1.9.2 3.4.9 4.3 2.3-1.7 1-2.5 2.5-2.5 4.4 0 1.5.5 2.7 1.6 3.7.5.4 1 .8 1.6 1-.1.4-.3.8-.5 1.3zM13.4.5c0 .8-.3 1.6-.9 2.4-.7.9-1.6 1.4-2.5 1.3 0-.9.3-1.7.9-2.4.3-.4.7-.7 1.2-1 .5-.2.9-.4 1.3-.4 0 0 0 .1 0 .1z"/></svg>
-          App Store 近日公開
+        <a href="https://apps.apple.com/jp/app/id6787849611" class="btn btn-primary btn-lg s-hero__btn-store">
+          <svg class="s-hero__apple" viewBox="0 0 16 20" width="16" height="20" aria-hidden="true"><path fill="currentColor" d="M13.07 15.6c-.24.55-.52 1.06-.85 1.53-.45.64-.82 1.08-1.1 1.32-.44.4-.9.6-1.4.62-.36 0-.79-.1-1.29-.31-.5-.2-.96-.3-1.38-.3-.44 0-.91.1-1.42.3-.51.21-.92.32-1.24.33-.48.02-.96-.19-1.43-.63-.3-.26-.69-.72-1.16-1.38-.5-.7-.92-1.51-1.24-2.44C.5 13.63.29 12.68.29 11.76c0-1.05.23-1.96.68-2.72a4 4 0 0 1 1.42-1.45 3.83 3.83 0 0 1 1.92-.55c.38 0 .88.12 1.5.35.62.23 1.02.35 1.17.35.28 0 .8-.14 1.55-.41.71-.25 1.31-.36 1.8-.32 1.33.11 2.33.63 3 1.57-1.19.72-1.78 1.73-1.77 3.02.01 1.01.38 1.85 1.1 2.51.33.31.69.55 1.1.72-.09.26-.18.5-.29.75ZM10.6.4c0 .78-.29 1.51-.85 2.19-.68.8-1.5 1.27-2.4 1.2a2.4 2.4 0 0 1-.02-.3c0-.75.32-1.56.9-2.22.29-.34.65-.62 1.1-.85.44-.22.86-.35 1.25-.37.01.12.02.24.02.35Z"/></svg>
+          App Storeでダウンロード
         </a>
-        <a href="#" class="btn btn-ghost btn-lg s-hero__btn-tf">
-          <span class="s-hero__tf-dot" aria-hidden="true"></span>TestFlightで先行体験
-        </a>
+        <span class="btn btn-ghost btn-lg s-hero__btn-tf is-soon" aria-disabled="true">
+          <span class="s-hero__tf-dot" aria-hidden="true"></span>Google Play 準備中
+        </span>
       </div>
 
       <ul class="s-hero__points reveal" data-d="3">
         <li class="s-hero__point"><span class="s-hero__pt-ico">🔥</span>レベル・XP・ストリークの炎</li>
         <li class="s-hero__point"><span class="s-hero__pt-ico">📱</span>iPhone最適化 / オフライン動作</li>
-        <li class="s-hero__point"><span class="s-hero__pt-ico">🔒</span>端末内保存のみ・収集ゼロ</li>
+        <li class="s-hero__point"><span class="s-hero__pt-ico">🔒</span>広告ゼロ・追跡なし</li>
       </ul>
     </div>
 
@@ -1512,7 +1544,7 @@ section[id]{scroll-margin-top:24px}
 
       <div class="s-hero__badge s-hero__badge--free" aria-hidden="true">
         <span class="s-hero__badge-num num">¥0</span>
-        <span class="s-hero__badge-cap">完全無料 / 広告なし</span>
+        <span class="s-hero__badge-cap">全機能無料 / 広告なし</span>
       </div>
       <div class="s-hero__badge s-hero__badge--q" aria-hidden="true">
         <span class="s-hero__badge-num num">15,000<sup>+</sup></span>
@@ -1551,14 +1583,14 @@ section[id]{scroll-margin-top:24px}
         <div class="s-marquee__figure num">
           <span class="s-marquee__yen">¥</span>0
         </div>
-        <div class="s-marquee__label">完全無料</div>
-        <div class="s-marquee__note">アプリ内課金なし・広告なし</div>
+        <div class="s-marquee__label">全機能無料</div>
+        <div class="s-marquee__note">広告なし・課金は任意の応援だけ</div>
       </div>
 
       <div class="s-marquee__stat">
-        <div class="s-marquee__figure s-marquee__figure--word">収集<span class="s-marquee__zero">ゼロ</span></div>
-        <div class="s-marquee__label">データ収集</div>
-        <div class="s-marquee__note">個人情報も行動データも集めない</div>
+        <div class="s-marquee__figure s-marquee__figure--word">広告<span class="s-marquee__zero">ゼロ</span></div>
+        <div class="s-marquee__label">広告・追跡</div>
+        <div class="s-marquee__note">広告なし・行動追跡なし</div>
       </div>
 
     </div>
@@ -1954,51 +1986,22 @@ section[id]{scroll-margin-top:24px}
         <div class="s-learn__figure reveal" data-d="1">
           <div class="s-learn__figtop">
             <span class="s-learn__figk">図解 · Illustration</span>
-            <span class="s-learn__fignum"><span class="num">20</span>種</span>
+            <span class="s-learn__fignum"><span class="num">280</span>点以上</span>
           </div>
 
-          <svg class="s-learn__svg" viewBox="0 0 360 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="運動の3面（矢状面・前額面・水平面）を示す人体線画">
-            <!-- planes (fade in) -->
-            <g class="s-learn__planes">
-              <polygon class="s-learn__pl" points="112,66 232,52 240,360 120,374" fill="var(--accent-2)" fill-opacity="0.05" stroke-opacity="0.4"/>
-              <polygon class="s-learn__pl" points="156,50 200,34 200,378 156,394" fill="var(--accent-2)" fill-opacity="0.07" stroke-opacity="0.55"/>
-              <ellipse class="s-learn__pl" cx="176" cy="238" rx="84" ry="21" fill="var(--accent-2)" fill-opacity="0.06" stroke-opacity="0.5"/>
-            </g>
-
-            <!-- body line-figure (draws) -->
-            <g class="s-learn__body">
-              <circle class="s-learn__bl" cx="176" cy="72" r="26"/>
-              <line class="s-learn__bl" x1="176" y1="98" x2="176" y2="122"/>
-              <line class="s-learn__bl" x1="134" y1="126" x2="218" y2="126"/>
-              <line class="s-learn__bl" x1="134" y1="126" x2="146" y2="238"/>
-              <line class="s-learn__bl" x1="218" y1="126" x2="206" y2="238"/>
-              <line class="s-learn__bl" x1="146" y1="238" x2="206" y2="238"/>
-              <line class="s-learn__bl" x1="134" y1="126" x2="116" y2="248"/>
-              <line class="s-learn__bl" x1="218" y1="126" x2="236" y2="248"/>
-              <line class="s-learn__bl" x1="158" y1="238" x2="152" y2="392"/>
-              <line class="s-learn__bl" x1="194" y1="238" x2="200" y2="392"/>
-            </g>
-
-            <!-- labels -->
-            <g class="s-learn__labels">
-              <g>
-                <circle class="s-learn__mkdot" cx="200" cy="40" r="2.5"/>
-                <text class="s-learn__lb" x="210" y="44">矢状面</text>
-              </g>
-              <g>
-                <circle class="s-learn__mkdot" cx="116" cy="120" r="2.5"/>
-                <text class="s-learn__lb" x="104" y="124" text-anchor="end">前額面</text>
-              </g>
-              <g>
-                <circle class="s-learn__mkdot" cx="260" cy="238" r="2.5"/>
-                <text class="s-learn__lb" x="268" y="242">水平面</text>
-              </g>
-            </g>
-          </svg>
+          <!-- 教材図版スライドショー: JSが .s-slide を回す -->
+          <div class="s-slides" id="learnSlides" aria-roledescription="カルーセル" aria-label="教材の図解サンプル">
+            <div class="s-slides__viewport">
+              <div class="s-slides__track" id="learnTrack"></div>
+              <button class="s-slides__nav s-slides__nav--prev" id="learnPrev" type="button" aria-label="前の図解">‹</button>
+              <button class="s-slides__nav s-slides__nav--next" id="learnNext" type="button" aria-label="次の図解">›</button>
+            </div>
+            <div class="s-slides__dots" id="learnDots" role="tablist" aria-label="図解を選ぶ"></div>
+          </div>
 
           <div class="s-learn__figcap">
-            <strong>運動の3面 — 矢状面・前額面・水平面</strong>
-            <span>教材と解説の随所に表示。オリジナルSVG図解、全20種のひとつ。</span>
+            <strong id="learnCapT">運動の3面と軸</strong>
+            <span id="learnCapD">教材と解説の随所に表示される図解。全分野あわせて280点以上を収録。</span>
           </div>
         </div>
       </div>
@@ -2017,7 +2020,7 @@ section[id]{scroll-margin-top:24px}
       </div>
       <div class="s-learn__point">
         <span class="s-learn__pn">03</span>
-        <span class="s-learn__ptext"><span class="s-learn__pt">20種のオリジナルSVG図解</span><span class="s-learn__pd">運動面・てこ・筋・脊柱・重心／支持基底面・エネルギー系・心臓・ニューロン・歩行など。</span></span>
+        <span class="s-learn__ptext"><span class="s-learn__pt">280点以上のオリジナル図解</span><span class="s-learn__pd">運動面・てこ・脊柱・筋収縮・経絡・治癒過程・BLSの流れなど、全17分野に描き下ろし。</span></span>
       </div>
       <div class="s-learn__point">
         <span class="s-learn__pn">04</span>
@@ -2132,7 +2135,7 @@ section[id]{scroll-margin-top:24px}
     <header class="s-privacy__head reveal">
       <p class="kicker s-privacy__kicker">プライバシーと価格</p>
       <h2 class="s-privacy__title">あなたの学びは、<br>あなたの端末に。</h2>
-      <p class="lead s-privacy__sub">学習データは端末内(localStorage)にのみ保存。個人情報も行動データも、一切集めません。</p>
+      <p class="lead s-privacy__sub">回答履歴や弱点などの学習データは端末内に保存。ランキングに使うのは表示名・アイコン・スコアだけで、行動追跡や広告は一切ありません。</p>
     </header>
 
     <div class="s-privacy__stage">
@@ -2155,12 +2158,12 @@ section[id]{scroll-margin-top:24px}
                 <circle cx="32" cy="40" r="0.6"></circle>
               </svg>
 
-              <p class="s-privacy__vault-txt">XP・称号・記録は<br>この端末だけに残る</p>
+              <p class="s-privacy__vault-txt">回答履歴・弱点データは<br>この端末の中に</p>
               <div class="s-privacy__dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
             </div>
 
             <p class="s-privacy__egress" aria-hidden="true">
-              外部送信 <b>0</b> ・ 追跡 <b>0</b> ・ 広告 <b>0</b>
+              送信は<b>スコアのみ</b> ・ 追跡 <b>0</b> ・ 広告 <b>0</b>
             </p>
           </div>
         </div>
@@ -2170,29 +2173,29 @@ section[id]{scroll-margin-top:24px}
         <li class="s-privacy__pt">
           <span class="s-privacy__pt-ic" aria-hidden="true">🚫</span>
           <div class="s-privacy__pt-body">
-            <p class="s-privacy__pt-t">収集ゼロ</p>
-            <p class="s-privacy__pt-d">アカウント登録なし、追跡なし。</p>
+            <p class="s-privacy__pt-t">取得は最小限</p>
+            <p class="s-privacy__pt-d">表示名・アイコン・スコアだけ。追跡なし。</p>
           </div>
         </li>
         <li class="s-privacy__pt">
           <span class="s-privacy__pt-ic" aria-hidden="true">🔒</span>
           <div class="s-privacy__pt-body">
-            <p class="s-privacy__pt-t">端末内保存</p>
-            <p class="s-privacy__pt-d">データが外に出ない。</p>
+            <p class="s-privacy__pt-t">学習の中身は端末内</p>
+            <p class="s-privacy__pt-d">回答履歴・弱点は外に出ない。</p>
           </div>
         </li>
         <li class="s-privacy__pt">
           <span class="s-privacy__pt-ic" aria-hidden="true">✈️</span>
           <div class="s-privacy__pt-body">
-            <p class="s-privacy__pt-t">オフライン動作</p>
+            <p class="s-privacy__pt-t">オフライン学習</p>
             <p class="s-privacy__pt-d">電波がなくても学べる。</p>
           </div>
         </li>
         <li class="s-privacy__pt">
           <span class="s-privacy__pt-ic" aria-hidden="true">💛</span>
           <div class="s-privacy__pt-body">
-            <p class="s-privacy__pt-t">完全無料</p>
-            <p class="s-privacy__pt-d">アプリ内課金なし・広告なし。</p>
+            <p class="s-privacy__pt-t">全機能無料</p>
+            <p class="s-privacy__pt-d">広告なし。課金は任意の「開発者応援」だけ。</p>
           </div>
         </li>
       </ul>
@@ -2202,7 +2205,7 @@ section[id]{scroll-margin-top:24px}
     <div class="s-privacy__price reveal">
       <p class="s-privacy__price-k">価格</p>
       <span class="s-privacy__price-num">¥0</span>
-      <p class="s-privacy__price-sub">17分野・約15,000問。すべて無料で、ずっと。</p>
+      <p class="s-privacy__price-sub">17分野・約15,000問。全機能無料で、ずっと。応援したい人だけの任意課金はあります。</p>
     </div>
 
   </div>
@@ -2219,43 +2222,43 @@ section[id]{scroll-margin-top:24px}
       <span class="s-cta__flame-line"></span>
     </div>
 
-    <p class="kicker s-cta__kicker reveal">近日公開</p>
+    <p class="kicker s-cta__kicker reveal">無料ダウンロード</p>
 
     <h2 class="s-cta__headline reveal" data-d="1">はじめよう。<br>毎日ひとくちから。</h2>
 
     <p class="lead s-cta__sub reveal" data-d="2">
-      iOSアプリとして App Store に申請済み。<br class="s-cta__brk">TestFlight で先行体験もできます。
+      App Store で配信中。無料でダウンロードできます。<br class="s-cta__brk">Android（Google Play）は現在準備中です。
     </p>
 
     <div class="s-cta__actions reveal" data-d="2">
-      <a class="s-cta__badge" href="#" aria-label="App Store 近日公開">
+      <a class="s-cta__badge" href="https://apps.apple.com/jp/app/id6787849611" aria-label="App Storeでダウンロード">
         <svg class="s-cta__apple" viewBox="0 0 16 20" aria-hidden="true">
           <path fill="currentColor" d="M13.07 15.6c-.24.55-.52 1.06-.85 1.53-.45.64-.82 1.08-1.1 1.32-.44.4-.9.6-1.4.62-.36 0-.79-.1-1.29-.31-.5-.2-.96-.3-1.38-.3-.44 0-.91.1-1.42.3-.51.21-.92.32-1.24.33-.48.02-.96-.19-1.43-.63-.3-.26-.69-.72-1.16-1.38-.5-.7-.92-1.51-1.24-2.44C.5 13.63.29 12.68.29 11.76c0-1.05.23-1.96.68-2.72a4 4 0 0 1 1.42-1.45 3.83 3.83 0 0 1 1.92-.55c.38 0 .88.12 1.5.35.62.23.02.35 1.17.35.28 0 .8-.14 1.55-.41.71-.25 1.31-.36 1.8-.32 1.33.11 2.33.63 3 1.57-1.19.72-1.78 1.73-1.77 3.02.01 1.01.38 1.85 1.1 2.51.33.31.69.55 1.1.72-.09.26-.18.5-.29.75ZM10.6.4c0 .78-.29 1.51-.85 2.19-.68.8-1.5 1.27-2.4 1.2a2.4 2.4 0 0 1-.02-.3c0-.75.32-1.56.9-2.22.29-.34.65-.62 1.1-.85.44-.22.86-.35 1.25-.37.01.12.02.24.02.35Z"/>
         </svg>
         <span class="s-cta__badge-txt">
-          <span class="s-cta__badge-top">近日公開 · Coming Soon</span>
+          <span class="s-cta__badge-top">無料 · Download on the</span>
           <span class="s-cta__badge-main">App Store</span>
         </span>
       </a>
 
-      <a class="s-cta__ghost" href="#" aria-label="TestFlightで先行体験">
+      <span class="s-cta__ghost is-soon" aria-disabled="true">
         <span class="s-cta__tf-dot" aria-hidden="true"></span>
-        TestFlight で先行体験
-      </a>
+        Google Play — 準備中
+      </span>
     </div>
 
     <ul class="s-cta__points reveal" data-d="3">
       <li class="s-cta__point">
         <span class="s-cta__check" aria-hidden="true">✓</span>
-        <span>App Store <strong>近日公開</strong> / Coming Soon</span>
+        <span>App Store で<strong>配信中</strong>・無料ダウンロード</span>
       </li>
       <li class="s-cta__point">
         <span class="s-cta__check" aria-hidden="true">✓</span>
-        <span>TestFlight で<strong>先行体験</strong>を受付予定</span>
+        <span>Google Play（Android）は<strong>準備中</strong></span>
       </li>
       <li class="s-cta__point">
         <span class="s-cta__check" aria-hidden="true">✓</span>
-        <span><strong>完全無料</strong>・収集ゼロ・オフライン対応</span>
+        <span><strong>全機能無料</strong>・広告なし・オフライン学習OK</span>
       </li>
       <li class="s-cta__point">
         <span class="s-cta__check" aria-hidden="true">✓</span>
@@ -2294,10 +2297,10 @@ section[id]{scroll-margin-top:24px}
         </div>
       </div>
     </div>
-    <p class="footer__disc" style="margin:var(--s3) 0 0">BodyQuest は学習を目的としたアプリであり、疾病の診断・治療を行うものではありません。健康上の判断は医療専門職にご相談ください。学習データはお使いの端末内にのみ保存され、収集されません。</p>
+    <p class="footer__disc" style="margin:var(--s3) 0 0">BodyQuest は学習を目的としたアプリであり、疾病の診断・治療を行うものではありません。健康上の判断は医療専門職にご相談ください。回答履歴などの学習データは端末内に保存され、ランキングには表示名・アイコン・スコアのみが使われます。</p>
     <div class="footer__legal">
       <span>© 2026 BodyQuest. All rights reserved.</span>
-      <span>17分野・15,000問以上・完全無料</span>
+      <span>17分野・15,000問以上・全機能無料</span>
     </div>
   </div>
 </footer>
@@ -2314,6 +2317,100 @@ section[id]{scroll-margin-top:24px}
   var nav = document.getElementById('nav');
   var onScroll = function(){ if(window.scrollY>12){ nav.classList.add('is-scrolled'); } else { nav.classList.remove('is-scrolled'); } };
   onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  /* ===== 教材図版スライドショー =====
+     アプリ内で実際に表示している教材図版(content/images/)をそのまま見せる。
+     画像はGitHub Pagesがリポジトリ全体を配信しているので相対パスで届く。 */
+  var SLIDES = [
+    {f:'functional_anatomy', l:'機能解剖学', c:'#4f8ef0', src:'functional_anatomy/fa_img_019.webp',
+     t:'運動の3面と軸', d:'矢状面・前額面・水平面と、それぞれの軸まわりに起こる運動を一枚で。'},
+    {f:'biomechanics', l:'バイオメカニクス', c:'#f0803c', src:'biomechanics/bio_img_lever_three_classes.webp',
+     t:'てこの3分類と機械的利益', d:'支点・力点・作用点の位置関係から、第1〜3種のてこを整理。'},
+    {f:'anatomy', l:'解剖学', c:'#e2555a', src:'anatomy/ana_img_spine.webp',
+     t:'脊柱の構造', d:'頸椎から尾骨まで。彎曲と各部位の特徴を立体的に。'},
+    {f:'physiology', l:'生理学', c:'#4caf72', src:'physiology/physiology_img_muscle_contraction.webp',
+     t:'筋収縮のしくみ', d:'アクチンとミオシンの滑走説を、分子レベルから。'},
+    {f:'toyo', l:'東洋医学', c:'#b06ef0', src:'toyo/toyo_img_meridians.webp',
+     t:'経絡の全体像', d:'経脈・絡脈・経穴の関係と、十二正経・奇経八脈。'},
+    {f:'assessment', l:'評価・テスト', c:'#3fb6c4', src:'assessment/asm_shoulder_rotatorcuff_function.webp',
+     t:'回旋筋腱板の機能テスト', d:'各筋の作用と、それを引き出す徒手テストの対応。'},
+    {f:'rehab', l:'傷害・リハビリ', c:'#e28a55', src:'rehab/rehab_img_healing_phases.webp',
+     t:'組織の治癒過程', d:'炎症期・増殖期・成熟期。各期にできることが変わる。'},
+    {f:'pain', l:'疼痛科学', c:'#ff5d8f', src:'pain/pain_img_neurophysiology.webp',
+     t:'痛みの神経生理', d:'侵害受容から脳での認知まで、痛みが生まれる道すじ。'},
+    {f:'nutrition', l:'栄養学', c:'#ffb300', src:'nutrition/nutrition_img_energy_metabolism.webp',
+     t:'エネルギー代謝', d:'糖・脂質・タンパク質がATPになるまでの全体像。'},
+    {f:'kinesiology', l:'運動学・トレ理論', c:'#7c6ef0', src:'kinesiology/kinesiology_img_supercompensation.webp',
+     t:'超回復と適応', d:'負荷・回復・適応のサイクルと、頻度設計の考え方。'},
+    {f:'firstaid', l:'救急・応急処置', c:'#d94f4f', src:'firstaid/firstaid_img_bls_flow.webp',
+     t:'一次救命処置(BLS)の流れ', d:'安全確認からCPR・AEDまで。現場で迷わない手順。'},
+    {f:'evo', l:'進化・発生・発達', c:'#5aa9a0', src:'evo/evo_img_bipedalism.webp',
+     t:'直立二足歩行への適応', d:'ヒトの骨格が「立って歩く」ために何を変えたのか。'}
+  ];
+  var track = document.getElementById('learnTrack');
+  if(track){
+    var dotsBox = document.getElementById('learnDots'),
+        capT = document.getElementById('learnCapT'), capD = document.getElementById('learnCapD'),
+        viewport = document.querySelector('.s-slides__viewport'),
+        i = 0, timer = null, DUR = 4200;
+
+    SLIDES.forEach(function(s, n){
+      var slide = document.createElement('div');
+      slide.className = 's-slide';
+      slide.setAttribute('role','group');
+      slide.setAttribute('aria-label', (n+1)+' / '+SLIDES.length+' — '+s.t);
+      slide.innerHTML =
+        '<img src="../content/images/'+s.src+'" alt="'+s.t+' — '+s.l+'の教材図解" '+
+          (n===0?'loading="eager"':'loading="lazy"')+' decoding="async">'+
+        '<span class="s-slide__tag" style="color:'+s.c+'">'+
+          '<i class="s-slide__tdot"></i><span style="color:#fff">'+s.l+'</span></span>';
+      track.appendChild(slide);
+
+      var dot = document.createElement('button');
+      dot.className = 's-slides__dot'+(n===0?' on':'');
+      dot.type = 'button';
+      dot.setAttribute('role','tab');
+      dot.setAttribute('aria-label', s.l+' — '+s.t);
+      dot.addEventListener('click', function(){ go(n); rest(); });
+      dotsBox.appendChild(dot);
+    });
+
+    var dots = dotsBox.querySelectorAll('.s-slides__dot');
+    function go(n){
+      i = (n + SLIDES.length) % SLIDES.length;
+      track.style.transform = 'translateX(-'+(i*100)+'%)';
+      dots.forEach(function(d, k){ d.classList.toggle('on', k===i); d.setAttribute('aria-selected', k===i); });
+      capT.textContent = SLIDES[i].t;
+      capD.textContent = SLIDES[i].d;
+    }
+    function play(){ if(!timer) timer = setInterval(function(){ go(i+1); }, DUR); }
+    function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+    function rest(){ stop(); play(); }
+
+    document.getElementById('learnPrev').addEventListener('click', function(){ go(i-1); rest(); });
+    document.getElementById('learnNext').addEventListener('click', function(){ go(i+1); rest(); });
+    viewport.addEventListener('mouseenter', stop);
+    viewport.addEventListener('mouseleave', play);
+
+    // スワイプ（モバイル）
+    var x0 = null;
+    viewport.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; stop(); }, {passive:true});
+    viewport.addEventListener('touchend', function(e){
+      if(x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if(Math.abs(dx) > 40) go(dx < 0 ? i+1 : i-1);
+      x0 = null; play();
+    }, {passive:true});
+
+    // 画面内にある間だけ自動再生（見えていないところで回さない）
+    var vio = new IntersectionObserver(function(es){
+      es.forEach(function(e){ e.isIntersecting ? play() : stop(); });
+    }, {threshold:0.25});
+    vio.observe(viewport);
+
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce) stop();
+  }
 })();
 </script>
 </body>
