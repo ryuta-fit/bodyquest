@@ -14,6 +14,12 @@
       "autoPort": true
     },
     {
+      "name": "support-test",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "exec python3 -m http.server --directory /private/tmp/claude-501/-Users-hayashiryuta-anatomy-app/739c7bf3-aa9a-4982-9cfe-936ef36a80a7/scratchpad/support-test \"${PORT:-4188}\""],
+      "autoPort": true
+    },
+    {
       "name": "lp",
       "runtimeExecutable": "bash",
       "runtimeArgs": ["-c", "exec python3 -m http.server --directory lp \"${PORT:-4180}\""],

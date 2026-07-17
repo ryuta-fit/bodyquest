@@ -352,3 +352,9 @@ body.reduce-motion *{animation-duration:.001s !important;transition-duration:.00
 /* Destructive action (account deletion) */
 .btn.ghost.danger{color:#ff8a8a;border-color:#e2555555}
 .btn.ghost.danger:disabled{opacity:.5}
+
+/* ===== Support (開発者応援) ===== */
+.support-tier{cursor:pointer;transition:transform .08s}
+.support-tier:active{transform:scale(.98)}
+.support-tier:disabled{opacity:.55;cursor:default}
+.support-price{color:#ff5d8f;font-weight:800;font-size:15px;white-space:nowrap}

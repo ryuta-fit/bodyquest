@@ -27,6 +27,7 @@
     title: null,        // equipped 称号 id (null = level rank)
     displayName: null,  // ranking nickname (null = provider account name)
     onboarded: false,   // first-run tutorial shown?
+    support: { count: 0, last: null }, // 開発者応援（応援課金）の記録
     weekXp: 0, weekKey: null, lastWeekRank: null, // weekly league
     settings: { sound: true, haptics: true, reduceMotion: false, dailyGoal: 30, fontScale: 1 },
   });
@@ -114,6 +115,9 @@
     list.push({ id: "perfect", cat: "特別", emoji: "💯", rar: "rare", label: "パーフェクト", desc: "10問テストで全問正解する", earned: () => S.perfectRuns > 0 });
     list.push({ id: "allround", cat: "特別", emoji: "🌈", rar: "epic", label: "オールラウンダー", desc: "全分野で10問以上習得する", earned: () => FIELDS.every(f => fieldProgress(f.key).mastered >= 10) });
     list.push({ id: "grandmaster", cat: "特別", emoji: "🏅", rar: "mythic", label: "全知の探究者", desc: "全分野を達人にする", earned: () => FIELDS.every(f => { const p = fieldProgress(f.key); return p.total > 0 && p.mastered >= p.total; }) });
+    list.push({ id: "supporter", cat: "特別", emoji: "💖", rar: "mythic", label: "開発応援団", desc: "開発者を応援する", earned: () => !!(S.support && S.support.count > 0) });
+    list.push({ id: "supporter3", cat: "特別", emoji: "📣", rar: "mythic", label: "応援団長", desc: "開発者を3回応援する", earned: () => !!(S.support && S.support.count >= 3) });
+    list.push({ id: "supporter10", cat: "特別", emoji: "🏛️", rar: "mythic", label: "伝説のパトロン", desc: "開発者を10回応援する", earned: () => !!(S.support && S.support.count >= 10) });
     return list;
   }
   function badgeById(id) { return buildBadges().find(b => b.id === id); }
@@ -965,16 +969,107 @@
       </div>
       <div class="section-title">分野別マスタリー</div>
       ${bars}
+      ${supportEntryHtml("statsSupport")}
       <div style="height:20px"></div>
       <button class="btn ghost" id="reset">データをリセット</button>
     `;
     $("#titleCard", s).addEventListener("click", renderBadges);
     $("#leagueCard", s).addEventListener("click", renderLeague);
+    const sp = $("#statsSupport", s); if (sp) sp.addEventListener("click", () => renderSupport("stats"));
     const og = $("#openSettings", s); if (og) og.addEventListener("click", renderSettings);
     $("#reset", s).addEventListener("click", () => {
       if (confirm("学習データを全て消去しますか？")) { localStorage.removeItem(SAVE_KEY); S = defaultState(); go("home"); toast("リセットしました"); }
     });
   }
+
+  /* ============================================================
+     SUPPORT  (開発者を応援する — 応援課金)
+     ============================================================ */
+  function supportOK() { return !!(window.BQSupport && BQSupport.visible()); }
+
+  // 設定/記録画面に置く入口カード。課金が使えない環境では空文字。
+  function supportEntryHtml(id) {
+    if (!supportOK()) return "";
+    return `
+      <div class="section-title">応援</div>
+      <button class="card card-row" id="${id}" style="text-align:left;width:100%;border-color:#ff5d8f44">
+        <span style="font-size:30px">💖</span>
+        <div style="flex:1"><b style="font-size:15px">開発者を応援する</b>
+          <div class="muted" style="font-size:12px">応援課金でBodyQuestの開発を支えられます</div></div>
+        <span style="color:#ff5d8f;font-weight:800">▸</span>
+      </button>`;
+  }
+
+  function renderSupport(from) {
+    const s = $("#screen"); s.scrollTop = 0;
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.route === "stats"));
+    const back = () => (from === "settings" ? renderSettings() : go("stats"));
+    if (!supportOK()) { back(); return; }
+    const tiers = BQSupport.tiers();
+    const n = (S.support && S.support.count) || 0;
+    const note = BQSupport.mode === "web" ? "・外部の決済ページが開きます。"
+      : BQSupport.mode === "dev" ? "・【開発モード】実際の課金は発生しません。"
+      : "・決済は App Store / Google Play を通じて安全に行われます。";
+    s.innerHTML = `
+      <button class="btn-sm" id="spBack">← もどる</button>
+      <div class="hero" style="margin-top:12px;background:linear-gradient(135deg,#ff5d8f33,#231d3a)">
+        <h1>💖 開発者を応援する</h1>
+        <p>BodyQuestは個人開発のアプリです。<br>いただいた応援は、新しい問題・教材・機能の開発にまるごと使わせていただきます。</p>
+      </div>
+      ${n ? `<div class="card center" style="border-color:#ff5d8f55"><b style="color:#ff5d8f">これまで ${n} 回応援いただいています。本当にありがとうございます！</b></div>` : ""}
+      <div class="section-title">応援メニュー</div>
+      ${tiers.map(t => `
+        <button class="card card-row support-tier" data-tid="${t.id}" style="text-align:left;width:100%">
+          <span style="font-size:32px">${t.emoji}</span>
+          <div style="flex:1"><b style="font-size:15px">${t.label}</b>
+            <div class="muted" style="font-size:12px">${t.desc}</div></div>
+          <span class="support-price">${t.price}</span>
+        </button>`).join("")}
+      <div class="muted" style="font-size:11px;margin:10px 2px;line-height:1.7">
+        ・応援は買い切りで、何度でもしていただけます。<br>
+        ・アプリの機能やコンテンツはすべて無料のまま変わりません。お礼として応援回数に応じた称号（💖 開発応援団 → 📣 応援団長 → 🏛️ 伝説のパトロン）を贈らせていただきます。<br>
+        ${note}
+      </div>`;
+    $("#spBack", s).addEventListener("click", back);
+    s.querySelectorAll(".support-tier").forEach(btn => btn.addEventListener("click", async () => {
+      if (btn.disabled) return;
+      s.querySelectorAll(".support-tier").forEach(b => b.disabled = true);
+      const price = $(".support-price", btn); const old = price.textContent;
+      price.textContent = "処理中…";
+      try {
+        await BQSupport.buy(btn.dataset.tid);
+        recordSupport();
+        const newB = checkBadges();
+        const sb = newB.filter(b => b.id.indexOf("supporter") === 0).pop(); // 最上位の応援称号を自動装備
+        if (sb) { S.title = sb.id; save(); }
+        syncCloud();
+        await celebrate({
+          emoji: "💖", title: "応援ありがとうございます！",
+          sub: "いただいた応援はアプリの改善と新コンテンツの開発に使わせていただきます。これからもBodyQuestをよろしくお願いします！",
+          badges: newB, rarity: newB.length ? "mythic" : undefined,
+          colors: ["#ff5d8f", "#ffd24a", "#fff"],
+        });
+        renderSupport(from);
+      } catch (e) {
+        const code = (e && e.code) || "";
+        if (code === "external") toast("応援ページを開きました🙏");
+        else if (code !== "cancelled") toast("購入を完了できませんでした。時間をおいてお試しください");
+        s.querySelectorAll(".support-tier").forEach(b => b.disabled = false);
+        price.textContent = old;
+      }
+    }));
+  }
+
+  function recordSupport() {
+    if (!S.support) S.support = { count: 0, last: null };
+    S.support.count++; S.support.last = Date.now();
+    save();
+  }
+
+  // アプリ中断などで購入待ちを取り逃した取引（再起動後にストアから届く）も記録する
+  if (window.BQSupport && BQSupport.onThanks) BQSupport.onThanks(() => {
+    recordSupport(); checkBadges(); toast("応援ありがとうございます！💖");
+  });
 
   /* ============================================================
      SETTINGS
@@ -1007,6 +1102,7 @@
       <h2 style="margin:14px 0">設定</h2>
       <div class="section-title">アカウント</div>
       ${account}
+      ${supportEntryHtml("setSupport")}
       <div class="section-title">アプリ</div>
       ${tgl("setSound", st.sound, "🔊 効果音", "正解・称号獲得などで音を鳴らす")}
       ${tgl("setHaptics", st.haptics, "📳 触覚フィードバック", "回答時に端末を振動させる（対応端末のみ）")}
@@ -1030,6 +1126,7 @@
       <div class="muted center" style="font-size:11px">BodyQuest ・ 学習は端末内に保存、スコアはランキングへ同期</div>
     `;
     $("#sback", s).addEventListener("click", () => go("stats"));
+    const spEntry = $("#setSupport", s); if (spEntry) spEntry.addEventListener("click", () => renderSupport("settings"));
     const flip = (key, id) => $("#" + id, s).addEventListener("click", () => {
       st[key] = !st[key]; save(); sfx("tap"); renderSettings();
     });
